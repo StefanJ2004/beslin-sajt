@@ -1,0 +1,9 @@
+{
+  "name": "kralj-dimova-sajt",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kralj Dimova - sajt i admin panel",
+  "dependencies": {
+    "@netlify/blobs": "^10.0.0"
+  }
+}
