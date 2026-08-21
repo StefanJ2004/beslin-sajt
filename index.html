@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kralj Dimova</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "surface-bright": "#f9f9fb",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f3f3f5",
+        "surface-container": "#eeeef0",
+        "surface-container-high": "#e8e8ea",
+        "surface-variant": "#e2e2e4",
+        "on-surface": "#1a1c1d",
+        "on-surface-variant": "#4c4546",
+        "outline": "#7e7576",
+        "outline-variant": "#cfc4c5",
+        "primary": "#000000",
+        "on-primary": "#ffffff",
+        "secondary": "#5e5e63",
+        "on-secondary": "#ffffff",
+        "tertiary": "#0066CC",
+        "on-tertiary": "#ffffff",
+        "surface": "#f9f9fb",
+        "background": "#f9f9fb",
+        "error": "#ba1a1a",
+        "on-error": "#ffffff"
+      },
+      spacing: {
+        "margin-mobile": "20px",
+        "section-padding-sm": "80px",
+        "section-padding-lg": "160px",
+        "container-max": "1200px",
+        "gutter": "24px"
+      },
+      fontFamily: { sans: ["Inter", "sans-serif"] },
+      fontSize: {
+        "label-caps": ["12px", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "600" }],
+        "headline-md": ["40px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "headline-md-mobile": ["28px", { lineHeight: "1.3", letterSpacing: "0", fontWeight: "600" }],
+        "body-lg": ["21px", { lineHeight: "1.5", letterSpacing: "-0.011em", fontWeight: "400" }],
+        "body-md": ["17px", { lineHeight: "1.5", letterSpacing: "-0.022em", fontWeight: "400" }],
+        "title-sm": ["24px", { lineHeight: "1.4", letterSpacing: "0", fontWeight: "500" }],
+        "display-lg": ["72px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "600" }],
+        "display-lg-mobile": ["40px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }]
+      }
+    }
+  }
+}
+</script>
+<style>
+  .material-symbols-outlined{ font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align:middle; }
+  .soft-shadow{ box-shadow: 0px 10px 40px rgba(0,0,0,0.04); }
+  .glass-panel{ backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .reveal-up{ opacity:0; transform:translateY(24px); transition: all .7s cubic-bezier(.16,1,.3,1); }
+  .reveal-up.active{ opacity:1; transform:translateY(0); }
+  input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  input[type=number]{ -moz-appearance:textfield; }
+  .accent-todoo-glo{ --accent:#FF6B4A; --accent-soft:rgba(255,107,74,0.10); }
+  .accent-icex-40k{ --accent:#3FC7EB; --accent-soft:rgba(63,199,235,0.10); }
+  .accent-extre-100k{ --accent:#8B5CF6; --accent-soft:rgba(139,92,246,0.10); }
+</style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<div id="app"></div>
+
+<script>
+/* ------------------------------------------------------------------ */
+/*  Data                                                              */
+/* ------------------------------------------------------------------ */
+
+var ADMIN_PASSCODE = 'todoo2026';
+var BRAND_NAME = 'Kralj Dimova';
+var DISCORD_URL = 'https://discord.gg/CzSRvgwXYu';
+
+var GLO_STANDARD = [
+  'Watermelon Grape Candy', 'Blue Razz', 'Double Apple', 'Lemon Lime',
+  'Blackcurrant', 'Guava Strawberry Kiwi Fruit', 'Berry Burst',
+  'Strawberry Lychee', 'Pink Lemonade', 'Fresh Mint',
+  'Strawberry Raspberry Cherry', 'Mango Pineapple', 'Passion Fruit Kiwi',
+  'Juicy Peach', 'Coffee Gum Bliss', 'Peach Blueberries', 'Cherry Cola',
+  'Strawberry Kiwi'
+];
+var GLO_GTS = [
+  'Blackcurrant', 'Mango Pineapple', 'Raspberry Coke', 'Kiwi Watermelon',
+  'Fantasy Cherry', 'Cool Mint', 'Kiwi Guava Strawberry', 'Peach Grape'
+];
+var ICEX_NAMES = [
+  'Clear', 'Miami Mint', 'Gold Tobacco', 'Strawberry Watermelon',
+  'Grape Storm', 'Mixed Berries', 'Blue Razz Ice', 'Strawberry Kiwi',
+  'Apple Zing', 'Vanilla Ice Cream', 'Cherry Cola', 'Passion Fruit Mango',
+  'Espresso Velvet', 'Black Cherry Peach', 'Zesty Grapefruit',
+  'Coffee Gum Bliss', 'Apple Pear Melody', 'Cucumber Grapefruit'
+];
+var EXTRE_NAMES = [
+  'Miami Mint', 'Strawberry B-Burst', 'Banana Taffy Freeze',
+  'Wild Cherry Slush', 'Mexico Mango', 'Frozen Pina Colada',
+  'White Gummy Ice', 'Watermelon Ice', 'Juicy Peach Ice', 'Grape Slush',
+  'Blue Razz Ice', 'Sour Apple Ice', 'Strawberry Watermelon',
+  'Omg B Burst', 'Fruity Cool Strawberry', 'Alaska Ice'
+];
+
+function makeFlavors(productId, names, series, startQty) {
+  return names.map(function (name, i) {
+    return { id: productId + '-' + series.toLowerCase() + '-' + i, name: name, series: series, qty: startQty };
+  });
+}
+
+function defaultCatalog() {
+  return {
+    'todoo-glo': {
+      id: 'todoo-glo', name: 'Todoo GLO', short: 'GLO',
+      accent: '#FF6B4A', image: 'images/todoo.png', icon: 'auto_awesome',
+      categoryLabel: 'TOPLI UKUSI',
+      tagline: 'Blag, ujednačen ukus za svaki dan.',
+      specsNote: 'Dostupan u klasičnoj i GTS seriji ukusa.',
+      puffsLabel: null,
+      priceTiers: [
+        { id: 't1', min: 1, max: 3, price: 1200 },
+        { id: 't2', min: 4, max: 9, price: 1100 },
+        { id: 't3', min: 10, max: null, price: 1000 }
+      ],
+      flavors: makeFlavors('todoo-glo', GLO_STANDARD, 'Standard', 30).concat(
+        makeFlavors('todoo-glo', GLO_GTS, 'GTS', 30)
+      )
+    },
+    'icex-40k': {
+      id: 'icex-40k', name: 'Icex 40k', short: 'ICEX',
+      accent: '#3FC7EB', image: 'images/icex.png', icon: 'ac_unit',
+      categoryLabel: 'LEDENI UKUSI',
+      tagline: '40.000 udisaja ledene svežine.',
+      specsNote: '18 osvežavajućih i voćnih ukusa.',
+      puffsLabel: '40.000 udisaja',
+      priceTiers: [
+        { id: 't1', min: 1, max: 3, price: 1800 },
+        { id: 't2', min: 4, max: 9, price: 1700 },
+        { id: 't3', min: 10, max: null, price: 1600 }
+      ],
+      flavors: makeFlavors('icex-40k', ICEX_NAMES, 'Standard', 30)
+    },
+    'extre-100k': {
+      id: 'extre-100k', name: 'Extre 100k', short: 'EXTRE',
+      accent: '#8B5CF6', image: 'images/extre.png', icon: 'local_fire_department',
+      categoryLabel: 'INTENZIVNI UKUSI',
+      tagline: '100.000 udisaja, ukus bez kompromisa.',
+      specsNote: '16 intenzivnih, ledenih ukusa.',
+      puffsLabel: '100.000 udisaja',
+      priceTiers: [
+        { id: 't1', min: 1, max: 3, price: 2500 },
+        { id: 't2', min: 4, max: 9, price: 2400 },
+        { id: 't3', min: 10, max: null, price: 2300 }
+      ],
+      flavors: makeFlavors('extre-100k', EXTRE_NAMES, 'Standard', 30)
+    }
+  };
+}
+
+var PRODUCT_ORDER = ['todoo-glo', 'icex-40k', 'extre-100k'];
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
+
+function icon(name, extraClass) {
+  return '<span class="material-symbols-outlined ' + (extraClass || '') + '">' + name + '</span>';
+}
+
+function tierForQty(tiers, qty) {
+  for (var i = 0; i < tiers.length; i++) {
+    var t = tiers[i];
+    var max = (t.max === null || t.max === undefined) ? Infinity : t.max;
+    if (qty >= t.min && qty <= max) return t;
+  }
+  // no exact range match (gap in admin-configured ranges) — fall back sensibly
+  var sorted = tiers.slice().sort(function (a, b) { return a.min - b.min; });
+  if (qty < sorted[0].min) return sorted[0];
+  return sorted[sorted.length - 1];
+}
+
+function tierLabel(t) {
+  if (t.max === null || t.max === undefined || t.max === '') return t.min + '+ kom';
+  if (t.min === t.max) return t.min + ' kom';
+  return t.min + '–' + t.max + ' kom';
+}
+
+function cheapestPrice(tiers) {
+  return Math.min.apply(null, tiers.map(function (t) { return t.price; }));
+}
+
+function formatRSD(n) {
+  return n.toLocaleString('sr-RS') + ' RSD';
+}
+
+function hashHue(str) {
+  var h = 0;
+  for (var i = 0; i < str.length; i++) { h = str.charCodeAt(i) + ((h << 5) - h); h |= 0; }
+  return Math.abs(h) % 360;
+}
+
+function groupBySeries(flavors) {
+  var order = [], map = {};
+  flavors.forEach(function (f) {
+    var key = f.series || 'Standard';
+    if (!map[key]) { map[key] = []; order.push(key); }
+    map[key].push(f);
+  });
+  return order.map(function (key) { return [key, map[key]]; });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function flavorOrb(name, size) {
+  size = size || 30;
+  var hue = hashHue(name);
+  var bg = 'radial-gradient(circle at 32% 28%, hsl(' + hue + ',80%,68%), hsl(' + hue + ',65%,48%) 65%, hsl(' + hue + ',55%,32%) 100%)';
+  return '<span style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;flex-shrink:0;display:inline-block;background:' + bg + '"></span>';
+}
+
+/* ------------------------------------------------------------------ */
+/*  Persistence — shared backend via Netlify Functions + Netlify Blobs */
+/* ------------------------------------------------------------------ */
+
+var API_URL = '/.netlify/functions/catalog';
+
+async function fetchCatalog() {
+  const res = await fetch(API_URL, { cache: 'no-store' });
+  if (!res.ok) throw new Error('fetch failed: ' + res.status);
+  const data = await res.json();
+  return data; // null if nothing saved on the server yet
+}
+
+async function pushCatalog(cat, passcode) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ passcode: passcode, catalog: cat }),
+  });
+  const data = await res.json().catch(function () { return {}; });
+  if (!res.ok) throw new Error(data.error || ('save failed: ' + res.status));
+  return data;
+}
+
+var syncTimer = null;
+function scheduleSync() {
+  savingState = 'saving';
+  renderApp();
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(async function () {
+    try {
+      await pushCatalog(catalog, adminToken);
+      savingState = 'saved';
+      lastSyncError = null;
+    } catch (err) {
+      savingState = 'error';
+      lastSyncError = err && err.message ? err.message : 'Nepoznata greška';
+    }
+    renderApp();
+  }, 500);
+}
+
+/* ------------------------------------------------------------------ */
+/*  App state                                                          */
+/* ------------------------------------------------------------------ */
+
+var catalog = defaultCatalog(); // placeholder until the server responds
+var catalogLoaded = false;
+var catalogLoadError = false;
+var adminUnlocked = false;
+var adminGateError = false;
+var adminToken = null;
+var savingState = 'saved'; // 'saving' | 'saved' | 'error'
+var lastSyncError = null;
+var adminActiveProduct = PRODUCT_ORDER[0];
+var adminSearch = '';
+var productQty = {};
+var lastProductId = null;
+
+/* ------------------------------------------------------------------ */
+/*  Shared chrome                                                      */
+/* ------------------------------------------------------------------ */
+
+function parseRoute() {
+  var h = (location.hash || '').replace(/^#\/?/, '');
+  var parts = h.split('/').filter(Boolean);
+  if (parts[0] === 'product' && parts[1]) return { view: 'product', id: parts[1] };
+  if (parts[0] === 'contact') return { view: 'contact' };
+  if (parts[0] === 'admin') return { view: 'admin' };
+  return { view: 'home' };
+}
+
+function renderNav(route) {
+  var linkClass = 'font-medium text-[12px] uppercase tracking-[0.05em] transition-opacity hover:opacity-70';
+  return (
+    '<header class="fixed top-0 w-full z-50 bg-surface/70 glass-panel border-b border-outline-variant/60">' +
+      '<div class="flex justify-between items-center h-[64px] px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
+        '<a class="text-lg font-semibold tracking-tight" href="#/">' + BRAND_NAME + '</a>' +
+        '<nav class="hidden md:flex items-center gap-8">' +
+          '<a class="' + linkClass + (route.view === 'home' ? ' text-primary' : ' text-secondary') + '" href="#modeli">Modeli</a>' +
+          '<a class="' + linkClass + (route.view === 'contact' ? ' text-primary' : ' text-secondary') + '" href="#/contact">Kontakt</a>' +
+        '</nav>' +
+        '<div class="flex items-center gap-4">' +
+          '<a class="' + linkClass + ' text-secondary hidden sm:flex items-center gap-1.5" href="#/admin">' + icon('settings', 'text-[18px]') + ' Admin</a>' +
+          '<a class="' + linkClass + ' text-secondary sm:hidden" href="#/admin">' + icon('settings', 'text-[20px]') + '</a>' +
+        '</div>' +
+      '</div>' +
+    '</header>'
+  );
+}
+
+function renderFooter() {
+  return (
+    '<footer class="w-full py-section-padding-sm bg-surface-bright border-t border-outline-variant">' +
+      '<div class="flex flex-col items-center justify-center gap-6 px-margin-mobile max-w-container-max mx-auto text-center">' +
+        '<span class="text-2xl font-semibold tracking-tight">' + BRAND_NAME + '</span>' +
+        '<div class="flex flex-wrap items-center justify-center gap-6">' +
+          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors flex items-center gap-1.5" href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer">' + icon('forum', 'text-[16px]') + ' Discord zajednica</a>' +
+          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/contact">Kontakt</a>' +
+          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/admin">Admin</a>' +
+        '</div>' +
+        '<p class="text-secondary text-label-caps font-label-caps">&copy; 2026 ' + BRAND_NAME + '.</p>' +
+      '</div>' +
+    '</footer>'
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Home                                                                */
+/* ------------------------------------------------------------------ */
+
+function renderHome() {
+  var totalAvailable = 0, totalFlavors = 0;
+  PRODUCT_ORDER.forEach(function (id) {
+    catalog[id].flavors.forEach(function (f) { totalFlavors++; if (f.qty > 0) totalAvailable++; });
+  });
+
+  var cards = PRODUCT_ORDER.map(function (id) {
+    var p = catalog[id];
+    var available = p.flavors.filter(function (f) { return f.qty > 0; }).length;
+    var cheapest = cheapestPrice(p.priceTiers);
+    return (
+      '<a href="#/product/' + id + '" class="accent-' + id + ' group reveal-up active bg-surface-container-lowest rounded-[24px] soft-shadow overflow-hidden flex flex-col">' +
+        '<div class="h-64 md:h-72 flex items-center justify-center bg-surface-container-low relative overflow-hidden">' +
+          '<div class="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-70" style="background:' + p.accent + '22"></div>' +
+          '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[86%] w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105">' +
+        '</div>' +
+        '<div class="p-8 flex flex-col flex-1">' +
+          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-4" style="color:' + p.accent + '">' + icon(p.icon, 'text-[15px]') + p.categoryLabel + '</span>' +
+          '<h3 class="text-title-sm font-title-sm text-primary mb-2">' + p.name + '</h3>' +
+          '<p class="text-secondary text-body-md font-body-md mb-4 flex-1">' + p.tagline + '</p>' +
+          '<div class="flex items-center justify-between text-sm pt-4 border-t border-outline-variant/60">' +
+            '<span class="text-secondary">od <span class="text-primary font-medium">' + formatRSD(cheapest) + '</span></span>' +
+            '<span class="text-secondary">' + available + ' ukusa</span>' +
+          '</div>' +
+        '</div>' +
+      '</a>'
+    );
+  }).join('');
+
+  return (
+    '<main class="pt-[64px]">' +
+      '<section class="min-h-[560px] flex flex-col items-center justify-center text-center relative px-margin-mobile md:px-gutter pt-24 pb-16">' +
+        '<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6 max-w-4xl">' +
+          'Ukusi koji <span style="color:#FF6B4A">sijaju</span>, <span style="color:#3FC7EB">hlade</span> i <span style="color:#8B5CF6">gore</span>.' +
+        '</h1>' +
+        '<p class="text-body-lg font-body-lg text-secondary mb-10 max-w-2xl">Todoo GLO, Icex 40k i Extre 100k — pogledaj dostupne ukuse i cene po komadu ili po količini.</p>' +
+        '<div class="flex flex-col sm:flex-row items-center gap-4 mb-10">' +
+          '<a href="#modeli" class="bg-primary text-on-primary px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-85 transition-opacity">Pogledaj modele</a>' +
+          '<a href="#/contact" class="bg-transparent text-primary px-8 py-4 rounded-full text-label-caps font-label-caps border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2">' + icon('forum', 'text-[16px]') + ' Pridruži se Discord-u</a>' +
+        '</div>' +
+        '<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-secondary text-sm">' +
+          '<span class="flex items-center gap-2">' + icon('inventory_2', 'text-[16px]') + totalAvailable + ' od ' + totalFlavors + ' ukusa na stanju</span>' +
+          '<span class="flex items-center gap-2">' + icon('local_offer', 'text-[16px]') + 'Cena zavisi od količine</span>' +
+          '<span class="flex items-center gap-2">' + icon('forum', 'text-[16px]') + 'Podrška na Discordu</span>' +
+        '</div>' +
+      '</section>' +
+
+      '<section id="modeli" class="py-section-padding-sm px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
+        '<div class="mb-10">' +
+          '<span class="text-label-caps font-label-caps text-secondary block mb-3">MODELI</span>' +
+          '<h2 class="text-headline-md-mobile md:text-headline-md font-headline-md-mobile md:font-headline-md text-primary">Izaberi svoj model.</h2>' +
+        '</div>' +
+        '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">' + cards + '</div>' +
+      '</section>' +
+    '</main>'
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Product detail                                                     */
+/* ------------------------------------------------------------------ */
+
+function renderProduct(id) {
+  var p = catalog[id];
+  if (!p) return '<main class="pt-[64px] px-margin-mobile py-section-padding-sm text-center"><p>Model nije pronađen.</p></main>';
+  if (lastProductId !== id) { productQty[id] = 1; lastProductId = id; }
+  var qty = productQty[id] || 1;
+  var tier = tierForQty(p.priceTiers, qty);
+  var total = tier.price * qty;
+  var groups = groupBySeries(p.flavors);
+
+  var tiersHtml = p.priceTiers.map(function (t) {
+    var active = t.id === tier.id;
+    return (
+      '<div class="flex items-center justify-between py-3' + (active ? '' : '') + '" style="' + (active ? 'color:' + p.accent : '') + '">' +
+        '<span class="text-body-md font-body-md ' + (active ? 'font-semibold' : 'text-secondary') + '">' + tierLabel(t) + '</span>' +
+        '<span class="text-body-md font-body-md font-medium">' + formatRSD(t.price) + '</span>' +
+      '</div>'
+    );
+  }).join('<div class="border-t border-outline-variant/60"></div>');
+
+  var groupsHtml = groups.map(function (pair) {
+    var series = pair[0], list = pair[1];
+    var inStock = list.filter(function (f) { return f.qty > 0; });
+    var head = '<div class="flex items-baseline justify-between mb-4"><h3 class="text-title-sm font-title-sm text-primary">' + (groups.length > 1 ? escapeHtml(series) + ' ukusi' : 'Dostupni ukusi') + '</h3><span class="text-secondary text-sm">' + inStock.length + ' od ' + list.length + '</span></div>';
+    var body;
+    if (inStock.length === 0) {
+      body = '<div class="flex items-center gap-2 text-secondary text-sm p-5 border border-dashed border-outline-variant rounded-xl">' + icon('inventory_2', 'text-[18px]') + 'Trenutno nema dostupnih ukusa u ovoj seriji.</div>';
+    } else {
+      body = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">' + inStock.map(function (f) {
+        return (
+          '<div class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/60 text-sm relative">' +
+            flavorOrb(f.name) +
+            '<span class="text-on-surface leading-tight">' + escapeHtml(f.name) + '</span>' +
+            (f.qty <= 10 ? '<span class="absolute -top-2 -right-1 text-[9px] bg-surface-container-high text-secondary px-1.5 py-0.5 rounded-full">malo</span>' : '') +
+          '</div>'
+        );
+      }).join('') + '</div>';
+    }
+    return '<div class="mb-10">' + head + body + '</div>';
+  }).join('');
+
+  return (
+    '<main class="pt-[64px] max-w-container-max mx-auto px-margin-mobile md:px-gutter py-section-padding-sm">' +
+      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' Nazad na početnu</a>' +
+      '<div class="grid grid-cols-1 md:grid-cols-12 gap-y-10 md:gap-x-gutter">' +
+        '<div class="md:col-span-6 bg-surface-container-low rounded-2xl soft-shadow flex items-center justify-center h-[380px] md:h-[560px] relative overflow-hidden">' +
+          '<div class="absolute -top-16 -right-16 w-72 h-72 rounded-full blur-3xl opacity-60" style="background:' + p.accent + '22"></div>' +
+          '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[85%] w-auto object-contain relative z-10">' +
+        '</div>' +
+        '<div class="md:col-span-6 flex flex-col justify-center">' +
+          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-3" style="color:' + p.accent + '">' + icon(p.icon, 'text-[16px]') + p.categoryLabel + '</span>' +
+          '<h1 class="text-display-lg-mobile md:text-headline-md font-display-lg-mobile md:font-headline-md text-primary mb-3">' + p.name + '</h1>' +
+          '<p class="text-body-lg font-body-lg text-secondary mb-1">od <span class="text-primary font-medium">' + formatRSD(cheapestPrice(p.priceTiers)) + '</span> po komadu' + (p.puffsLabel ? ' &middot; ' + p.puffsLabel : '') + '</p>' +
+          '<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mt-4">' + p.tagline + ' ' + p.specsNote + '</p>' +
+
+          '<div class="bg-surface-container-low rounded-xl p-6 mt-8 soft-shadow">' +
+            '<div class="flex items-start gap-3 mb-1">' +
+              icon('local_offer', 'text-primary mt-0.5') +
+              '<h3 class="text-title-sm font-title-sm text-primary">Cene po količini</h3>' +
+            '</div>' +
+            '<div class="pl-9">' + tiersHtml + '</div>' +
+          '</div>' +
+
+          '<div class="flex items-center gap-4 mt-8">' +
+            '<div class="flex items-center border border-outline-variant rounded-lg">' +
+              '<button aria-label="Umanji količinu" data-action="qty-delta" data-product="' + id + '" data-delta="-1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('remove') + '</button>' +
+              '<input type="number" min="1" value="' + qty + '" data-action="qty-set" data-product="' + id + '" class="w-12 text-center border-none bg-transparent focus:outline-none text-body-md font-body-md">' +
+              '<button aria-label="Povećaj količinu" data-action="qty-delta" data-product="' + id + '" data-delta="1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('add') + '</button>' +
+            '</div>' +
+            '<span class="text-secondary text-sm">Ukupno <span class="text-primary font-semibold">' + formatRSD(total) + '</span></span>' +
+          '</div>' +
+
+          '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-primary text-on-primary py-4 rounded-lg text-label-caps font-label-caps hover:opacity-85 transition-opacity mt-4">' +
+            'PORUČI PREKO DISCORDA — ' + formatRSD(total) +
+          '</a>' +
+          '<div class="flex items-center justify-center gap-2 pt-4 text-secondary text-label-caps font-label-caps">' + icon('forum', 'text-[16px]') + ' Poručivanje i dogovor idu preko Discord servera</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="mt-16 pt-12 border-t border-outline-variant">' + groupsHtml + '</div>' +
+    '</main>'
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Contact                                                             */
+/* ------------------------------------------------------------------ */
+
+function renderContact() {
+  return (
+    '<main class="pt-[64px] max-w-xl mx-auto px-margin-mobile py-section-padding-sm text-center">' +
+      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' Nazad na početnu</a>' +
+      '<div class="bg-surface-container-lowest rounded-2xl soft-shadow p-10 md:p-14 flex flex-col items-center gap-5">' +
+        '<span class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center">' + icon('forum', 'text-[26px] text-primary') + '</span>' +
+        '<h1 class="text-headline-md-mobile font-headline-md-mobile text-primary">Kontaktiraj ' + BRAND_NAME + '</h1>' +
+        '<p class="text-body-md font-body-md text-secondary leading-relaxed">Pitanja o ukusima, dostupnosti ili porudžbini? Pridruži se našem Discord serveru — tu najbrže odgovaramo.</p>' +
+        '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="bg-[#5865F2] text-white px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-90 transition-opacity flex items-center gap-2 mt-2">' + icon('forum', 'text-[18px]') + ' Pridruži se Discord serveru</a>' +
+        '<span class="text-secondary text-xs break-all">' + DISCORD_URL + '</span>' +
+      '</div>' +
+    '</main>'
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Admin                                                               */
+/* ------------------------------------------------------------------ */
+
+function renderAdminGate() {
+  return (
+    '<main class="pt-[64px] min-h-[70vh] flex items-center justify-center px-margin-mobile">' +
+      '<form data-action="admin-unlock" class="bg-surface-container-lowest rounded-2xl soft-shadow p-10 max-w-sm w-full flex flex-col items-center gap-3 text-center">' +
+        '<span class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center mb-1">' + icon('lock', 'text-primary') + '</span>' +
+        '<h2 class="text-title-sm font-title-sm text-primary">Admin panel</h2>' +
+        '<p class="text-secondary text-sm">Unesi šifru da bi menjao/la zalihe i cene.</p>' +
+        '<input id="admin-code-input" type="password" autocomplete="off" placeholder="Šifra" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-4 py-3 text-center focus:ring-1 focus:ring-primary focus:border-primary outline-none mt-2">' +
+        (adminGateError ? '<span class="text-error text-xs">Pogrešna šifra, pokušaj ponovo.</span>' : '') +
+        '<button type="submit" class="w-full bg-primary text-on-primary rounded-lg py-3 text-label-caps font-label-caps hover:opacity-85 transition-opacity mt-2">Otključaj</button>' +
+      '</form>' +
+    '</main>'
+  );
+}
+
+function renderSaveStatus() {
+  if (savingState === 'saving') {
+    return '<span class="inline-flex items-center gap-1.5 text-xs text-secondary bg-surface-container-low px-3 py-1.5 rounded-full">' + icon('sync', 'text-[15px] animate-spin') + 'Čuva se…</span>';
+  }
+  if (savingState === 'error') {
+    return (
+      '<button data-action="retry-sync" title="' + escapeHtml(lastSyncError || '') + '" class="inline-flex items-center gap-1.5 text-xs text-error bg-red-50 px-3 py-1.5 rounded-full hover:opacity-80 transition-opacity">' +
+        icon('error', 'text-[15px]') + 'Greška: ' + escapeHtml(lastSyncError || 'nepoznata') + ' — pokušaj ponovo' +
+      '</button>'
+    );
+  }
+  return '<span class="inline-flex items-center gap-1.5 text-xs text-secondary bg-surface-container-low px-3 py-1.5 rounded-full">' + icon('check_circle', 'text-[15px]') + 'Sačuvano</span>';
+}
+
+function renderAdminPanel() {
+  var p = catalog[adminActiveProduct];
+  var groups = groupBySeries(p.flavors);
+  var search = adminSearch.trim().toLowerCase();
+
+  var sidebarLinks = PRODUCT_ORDER.map(function (id) {
+    var pr = catalog[id];
+    var active = id === adminActiveProduct;
+    return (
+      '<button data-action="admin-tab" data-product="' + id + '" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ' +
+      (active ? 'bg-primary text-on-primary' : 'text-secondary hover:bg-surface-variant/60') + '">' +
+        icon(pr.icon, 'text-[18px]') + '<span class="text-sm font-medium">' + pr.name + '</span>' +
+      '</button>'
+    );
+  }).join('');
+
+  var tiersHtml = p.priceTiers.map(function (t, i) {
+    return (
+      '<div class="pb-5 mb-5 border-b border-surface-variant last:border-b-0 last:pb-0 last:mb-0">' +
+        '<p class="text-label-caps font-label-caps text-secondary mb-3">Opseg ' + (i + 1) + '</p>' +
+        '<div class="flex items-center gap-3 mb-3">' +
+          '<div class="flex-1">' +
+            '<label class="block text-xs text-secondary mb-1">Od (kom)</label>' +
+            '<input type="number" min="1" value="' + t.min + '" data-action="tier-min" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
+          '</div>' +
+          '<div class="flex-1">' +
+            '<label class="block text-xs text-secondary mb-1">Do (kom)</label>' +
+            '<input type="number" min="1" value="' + ((t.max === null || t.max === undefined) ? '' : t.max) + '" placeholder="bez granice" data-action="tier-max" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
+          '</div>' +
+        '</div>' +
+        '<label class="block text-xs text-secondary mb-1">Cena po komadu</label>' +
+        '<div class="flex items-center gap-2">' +
+          '<input type="number" min="0" value="' + t.price + '" data-action="tier-price" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
+          '<span class="text-secondary text-sm shrink-0">RSD</span>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+
+  var totalStock = p.flavors.reduce(function (s, f) { return s + f.qty; }, 0);
+  var availableCount = p.flavors.filter(function (f) { return f.qty > 0; }).length;
+
+  var stockHtml = groups.map(function (pair) {
+    var series = pair[0], list = pair[1];
+    var filtered = search ? list.filter(function (f) { return f.name.toLowerCase().indexOf(search) !== -1; }) : list;
+    if (filtered.length === 0) return '';
+    var rows = filtered.map(function (f) {
+      return (
+        '<div class="flex items-center justify-between gap-3 py-3 border-b border-surface-variant/60 flex-wrap">' +
+          '<div class="flex items-center gap-3 min-w-[160px]">' + flavorOrb(f.name, 26) + '<span class="text-sm text-on-surface">' + escapeHtml(f.name) + '</span></div>' +
+          '<div class="flex items-center gap-2">' +
+            '<div class="flex gap-1">' +
+              '<button data-action="stock-delta" data-flavor="' + f.id + '" data-delta="-10" class="text-xs px-2 py-1 rounded border border-outline-variant text-secondary hover:border-error hover:text-error transition-colors">-10</button>' +
+              '<button data-action="stock-delta" data-flavor="' + f.id + '" data-delta="-5" class="text-xs px-2 py-1 rounded border border-outline-variant text-secondary hover:border-error hover:text-error transition-colors">-5</button>' +
+              '<button data-action="stock-delta" data-flavor="' + f.id + '" data-delta="-1" class="text-xs px-2 py-1 rounded border border-outline-variant text-secondary hover:border-error hover:text-error transition-colors">-1</button>' +
+            '</div>' +
+            '<span class="w-8 text-center font-semibold text-sm ' + (f.qty === 0 ? 'text-error' : 'text-primary') + '">' + f.qty + '</span>' +
+            '<div class="flex gap-1">' +
+              '<button data-action="stock-delta" data-flavor="' + f.id + '" data-delta="1" class="text-xs px-2 py-1 rounded border border-outline-variant text-secondary hover:border-tertiary hover:text-tertiary transition-colors">+1</button>' +
+              '<button data-action="stock-delta" data-flavor="' + f.id + '" data-delta="5" class="text-xs px-2 py-1 rounded border border-outline-variant text-secondary hover:border-tertiary hover:text-tertiary transition-colors">+5</button>' +
+              '<button data-action="stock-delta" data-flavor="' + f.id + '" data-delta="10" class="text-xs px-2 py-1 rounded border border-outline-variant text-secondary hover:border-tertiary hover:text-tertiary transition-colors">+10</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    return '<div class="mb-2">' + (groups.length > 1 ? '<p class="text-label-caps font-label-caps text-secondary mt-4 mb-1">' + escapeHtml(series) + '</p>' : '') + rows + '</div>';
+  }).join('');
+
+  return (
+    '<div class="pt-[64px] min-h-screen flex flex-col md:flex-row">' +
+      '<aside class="w-full md:w-64 md:min-h-screen bg-surface-container-lowest border-r border-outline-variant p-6 flex flex-col gap-1 md:sticky md:top-[64px] md:h-[calc(100vh-64px)]">' +
+        '<div class="mb-4">' +
+          '<h1 class="text-title-sm font-title-sm text-primary">Admin panel</h1>' +
+          '<p class="text-label-caps font-label-caps text-secondary mt-1">' + BRAND_NAME + '</p>' +
+        '</div>' +
+        sidebarLinks +
+        '<div class="mt-auto flex flex-col gap-1 pt-4 border-t border-surface-variant">' +
+          '<a href="#/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-surface-variant/60 transition-colors text-sm">' + icon('arrow_back', 'text-[18px]') + ' Nazad na sajt</a>' +
+          '<button data-action="admin-lock" class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-surface-variant/60 transition-colors text-sm text-left">' + icon('logout', 'text-[18px]') + ' Zaključaj</button>' +
+        '</div>' +
+      '</aside>' +
+
+      '<main class="flex-1 p-6 md:p-10 max-w-[1400px]">' +
+        (catalogLoadError ?
+          '<div class="flex items-center justify-between gap-3 bg-red-50 text-error text-sm px-4 py-3 rounded-lg mb-5">' +
+            '<span class="flex items-center gap-2">' + icon('error', 'text-[18px]') + 'Nismo uspeli da učitamo najnovije podatke sa servera — prikazano je poslednje poznato stanje.</span>' +
+            '<button data-action="retry-load" class="underline shrink-0">Pokušaj ponovo</button>' +
+          '</div>' : ''
+        ) +
+        '<div class="flex flex-wrap justify-between items-end gap-4 mb-3">' +
+          '<div>' +
+            '<h2 class="text-headline-md-mobile font-headline-md-mobile text-primary">' + p.name + '</h2>' +
+            '<p class="text-secondary text-sm mt-1">Zalihe i cene po količini za ovaj model.</p>' +
+          '</div>' +
+          renderSaveStatus() +
+        '</div>' +
+        '<p class="text-xs text-secondary mb-8 max-w-2xl">Zalihe i cene se čuvaju na serveru (deljeno) — vidljive su odmah svim posetiocima sajta, na svim uređajima.</p>' +
+
+        '<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">' +
+          '<div class="xl:col-span-2 bg-surface-container-lowest rounded-xl soft-shadow p-6 md:p-8">' +
+            '<div class="flex flex-wrap justify-between items-center gap-4 mb-2">' +
+              '<h3 class="text-title-sm font-title-sm text-primary flex items-center gap-2">' + icon('inventory_2', 'text-[20px]') + 'Zalihe ukusa</h3>' +
+              '<div class="relative">' +
+                icon('search', 'absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[16px]') +
+                '<input type="text" value="' + escapeHtml(adminSearch) + '" data-action="admin-search" placeholder="Pretraži ukuse..." class="bg-surface-bright border-none text-sm py-2 pl-9 pr-3 rounded-lg focus:ring-1 focus:ring-primary w-full sm:w-56">' +
+              '</div>' +
+            '</div>' +
+            '<p class="text-secondary text-xs mb-4">Ukusi sa 0 na stanju su automatski skriveni sa glavnog sajta.</p>' +
+            '<div>' + stockHtml + '</div>' +
+          '</div>' +
+
+          '<div class="xl:col-span-1 flex flex-col gap-6">' +
+            '<div class="bg-surface-container-lowest rounded-xl soft-shadow p-6 md:p-8">' +
+              '<h3 class="text-title-sm font-title-sm text-primary mb-6 flex items-center gap-2">' + icon('local_offer', 'text-[20px]') + 'Cene po količini</h3>' +
+              '<div>' + tiersHtml + '</div>' +
+            '</div>' +
+            '<div class="bg-surface-container-lowest rounded-xl soft-shadow p-6 md:p-8">' +
+              '<h3 class="text-label-caps font-label-caps text-secondary mb-4">Pregled</h3>' +
+              '<div class="flex justify-between py-2 border-b border-surface-variant text-sm"><span class="text-secondary">Dostupnih ukusa</span><span class="font-medium text-primary">' + availableCount + ' / ' + p.flavors.length + '</span></div>' +
+              '<div class="flex justify-between py-2 text-sm"><span class="text-secondary">Ukupno komada na stanju</span><span class="font-medium text-primary">' + totalStock + '</span></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</main>' +
+    '</div>'
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Render + routing                                                    */
+/* ------------------------------------------------------------------ */
+
+function renderApp() {
+  var route = parseRoute();
+  var app = document.getElementById('app');
+  var body = '';
+
+  if (route.view === 'home') { body = renderHome() + renderFooter(); document.title = BRAND_NAME; }
+  else if (route.view === 'product') {
+    var pr = catalog[route.id];
+    body = renderProduct(route.id) + renderFooter();
+    document.title = (pr ? pr.name + ' — ' : '') + BRAND_NAME;
+  }
+  else if (route.view === 'contact') { body = renderContact() + renderFooter(); document.title = 'Kontakt — ' + BRAND_NAME; }
+  else if (route.view === 'admin') { body = adminUnlocked ? renderAdminPanel() : renderAdminGate() + renderFooter(); document.title = 'Admin — ' + BRAND_NAME; }
+
+  app.innerHTML = renderNav(route) + body;
+
+  requestAnimationFrame(function () {
+    document.querySelectorAll('.reveal-up').forEach(function (el) { el.classList.add('active'); });
+  });
+
+  if (route.view === 'admin' && !adminUnlocked) {
+    var input = document.getElementById('admin-code-input');
+    if (input) input.focus();
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Events                                                              */
+/* ------------------------------------------------------------------ */
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (!location.hash) location.hash = '#/';
+  window.addEventListener('hashchange', renderApp);
+
+  var app = document.getElementById('app');
+
+  // Poll for fresh data periodically so a tab left open (e.g. a customer
+  // browsing) picks up admin changes without a manual refresh. Skipped
+  // while the tab is hidden, and while the admin panel is open (so a poll
+  // never clobbers an in-progress, not-yet-saved edit).
+  setInterval(async function () {
+    if (document.visibilityState !== 'visible') return;
+    if (adminUnlocked) return;
+    try {
+      var fresh = await fetchCatalog();
+      if (fresh) { catalog = fresh; renderApp(); }
+    } catch (err) { /* stay on last known good data */ }
+  }, 20000);
+
+  app.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-action]');
+    if (!el) return;
+    var action = el.dataset.action;
+
+    if (action === 'qty-delta') {
+      var pid = el.dataset.product;
+      var delta = parseInt(el.dataset.delta, 10);
+      productQty[pid] = Math.max(1, (productQty[pid] || 1) + delta);
+      renderApp();
+    } else if (action === 'stock-delta') {
+      var flavorId = el.dataset.flavor;
+      var d = parseInt(el.dataset.delta, 10);
+      var p = catalog[adminActiveProduct];
+      p.flavors = p.flavors.map(function (f) {
+        return f.id === flavorId ? Object.assign({}, f, { qty: Math.max(0, f.qty + d) }) : f;
+      });
+      scheduleSync();
+    } else if (action === 'admin-tab') {
+      adminActiveProduct = el.dataset.product;
+      adminSearch = '';
+      renderApp();
+    } else if (action === 'admin-lock') {
+      adminUnlocked = false;
+      adminToken = null;
+      location.hash = '#/';
+    } else if (action === 'retry-sync') {
+      scheduleSync();
+    } else if (action === 'retry-load') {
+      fetchCatalog().then(function (fresh) {
+        if (fresh) catalog = fresh;
+        catalogLoadError = false;
+        renderApp();
+      }).catch(function () {
+        catalogLoadError = true;
+        renderApp();
+      });
+    }
+  });
+
+  app.addEventListener('submit', function (e) {
+    var el = e.target.closest('[data-action="admin-unlock"]');
+    if (!el) return;
+    e.preventDefault();
+    var input = document.getElementById('admin-code-input');
+    if (input && input.value === ADMIN_PASSCODE) {
+      adminUnlocked = true;
+      adminGateError = false;
+      adminToken = input.value;
+      savingState = 'saved';
+    } else {
+      adminGateError = true;
+    }
+    renderApp();
+  });
+
+  app.addEventListener('input', function (e) {
+    var ds = e.target.dataset;
+    if (!ds) return;
+    if (ds.action === 'qty-set') {
+      var v = parseInt(e.target.value, 10);
+      productQty[ds.product] = (Number.isFinite(v) && v > 0) ? v : 1;
+      renderApp();
+    } else if (ds.action === 'tier-price') {
+      var price = Math.max(0, parseInt(e.target.value, 10) || 0);
+      var p = catalog[adminActiveProduct];
+      p.priceTiers = p.priceTiers.map(function (t) { return t.id === ds.tier ? Object.assign({}, t, { price: price }) : t; });
+      scheduleSync();
+    } else if (ds.action === 'tier-min') {
+      var minVal = parseInt(e.target.value, 10);
+      minVal = Number.isFinite(minVal) && minVal > 0 ? minVal : 1;
+      var p2 = catalog[adminActiveProduct];
+      p2.priceTiers = p2.priceTiers.map(function (t) { return t.id === ds.tier ? Object.assign({}, t, { min: minVal }) : t; });
+      scheduleSync();
+    } else if (ds.action === 'tier-max') {
+      var raw = e.target.value.trim();
+      var maxVal = raw === '' ? null : (Number.isFinite(parseInt(raw, 10)) ? parseInt(raw, 10) : null);
+      var p3 = catalog[adminActiveProduct];
+      p3.priceTiers = p3.priceTiers.map(function (t) { return t.id === ds.tier ? Object.assign({}, t, { max: maxVal }) : t; });
+      scheduleSync();
+    } else if (ds.action === 'admin-search') {
+      adminSearch = e.target.value;
+      renderApp();
+      var re = document.querySelector('[data-action="admin-search"]');
+      if (re) { re.focus(); re.setSelectionRange(re.value.length, re.value.length); }
+    }
+  });
+
+  // Initial load: try the shared backend; fall back to sensible defaults
+  // (already in `catalog`) if the function isn't reachable yet, so the
+  // site still renders instead of staying blank.
+  renderApp();
+  fetchCatalog().then(function (fresh) {
+    if (fresh) catalog = fresh;
+    catalogLoaded = true;
+    renderApp();
+  }).catch(function () {
+    catalogLoaded = true;
+    catalogLoadError = true;
+    renderApp();
+  });
+});
+</script>
+</body>
+</html>
