@@ -42,10 +42,17 @@ export default async (req) => {
   // them, each site keeps its own separate catalog.
   // Values pasted into the Netlify UI often carry stray spaces/newlines,
   // which make Netlify reject them with a 401.
+  //
+  // When BLOBS_SITE_ID is this site's own ID, the token is unnecessary:
+  // Netlify already gives the function access to its own site's store.
+  // Using a manual token there only adds a way to break (an expired or
+  // revoked token makes every read and save fail with a 401), so the
+  // built-in credentials are used instead.
   const sharedSiteID = (process.env.BLOBS_SITE_ID || '').trim();
   const sharedToken = (process.env.BLOBS_TOKEN || '').trim();
+  const thisSiteID = (process.env.SITE_ID || '').trim();
   const storeOptions = { name: 'kralj-dimova', consistency: 'strong' };
-  if (sharedSiteID && sharedToken) {
+  if (sharedSiteID && sharedToken && sharedSiteID !== thisSiteID) {
     storeOptions.siteID = sharedSiteID;
     storeOptions.token = sharedToken;
   }
