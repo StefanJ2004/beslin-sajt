@@ -7,31 +7,42 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+(function () {
+  var theme = null;
+  try { theme = localStorage.getItem('kd-theme'); } catch (e) {}
+  if (theme !== 'light' && theme !== 'dark') {
+    theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  if (theme === 'dark') document.documentElement.classList.add('dark');
+})();
+</script>
 <script id="tailwind-config">
 tailwind.config = {
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        "surface-bright": "#f9f9fb",
-        "surface-container-lowest": "#ffffff",
-        "surface-container-low": "#f3f3f5",
-        "surface-container": "#eeeef0",
-        "surface-container-high": "#e8e8ea",
-        "surface-variant": "#e2e2e4",
-        "on-surface": "#1a1c1d",
-        "on-surface-variant": "#4c4546",
-        "outline": "#7e7576",
-        "outline-variant": "#cfc4c5",
-        "primary": "#000000",
-        "on-primary": "#ffffff",
-        "secondary": "#5e5e63",
-        "on-secondary": "#ffffff",
-        "tertiary": "#0066CC",
-        "on-tertiary": "#ffffff",
-        "surface": "#f9f9fb",
-        "background": "#f9f9fb",
-        "error": "#ba1a1a",
-        "on-error": "#ffffff"
+        "surface-bright": "rgb(var(--c-surface-bright) / <alpha-value>)",
+        "surface-container-lowest": "rgb(var(--c-surface-container-lowest) / <alpha-value>)",
+        "surface-container-low": "rgb(var(--c-surface-container-low) / <alpha-value>)",
+        "surface-container": "rgb(var(--c-surface-container) / <alpha-value>)",
+        "surface-container-high": "rgb(var(--c-surface-container-high) / <alpha-value>)",
+        "surface-variant": "rgb(var(--c-surface-variant) / <alpha-value>)",
+        "on-surface": "rgb(var(--c-on-surface) / <alpha-value>)",
+        "on-surface-variant": "rgb(var(--c-on-surface-variant) / <alpha-value>)",
+        "outline": "rgb(var(--c-outline) / <alpha-value>)",
+        "outline-variant": "rgb(var(--c-outline-variant) / <alpha-value>)",
+        "primary": "rgb(var(--c-primary) / <alpha-value>)",
+        "on-primary": "rgb(var(--c-on-primary) / <alpha-value>)",
+        "secondary": "rgb(var(--c-secondary) / <alpha-value>)",
+        "on-secondary": "rgb(var(--c-on-secondary) / <alpha-value>)",
+        "tertiary": "rgb(var(--c-tertiary) / <alpha-value>)",
+        "on-tertiary": "rgb(var(--c-on-tertiary) / <alpha-value>)",
+        "surface": "rgb(var(--c-surface) / <alpha-value>)",
+        "background": "rgb(var(--c-background) / <alpha-value>)",
+        "error": "rgb(var(--c-error) / <alpha-value>)",
+        "on-error": "rgb(var(--c-on-error) / <alpha-value>)"
       },
       spacing: {
         "margin-mobile": "20px",
@@ -56,6 +67,54 @@ tailwind.config = {
 }
 </script>
 <style>
+  :root {
+    --c-surface-bright: 249 249 251;
+    --c-surface-container-lowest: 255 255 255;
+    --c-surface-container-low: 243 243 245;
+    --c-surface-container: 238 238 240;
+    --c-surface-container-high: 232 232 234;
+    --c-surface-variant: 226 226 228;
+    --c-on-surface: 26 28 29;
+    --c-on-surface-variant: 76 69 70;
+    --c-outline: 126 117 118;
+    --c-outline-variant: 207 196 197;
+    --c-primary: 0 0 0;
+    --c-on-primary: 255 255 255;
+    --c-secondary: 94 94 99;
+    --c-on-secondary: 255 255 255;
+    --c-tertiary: 0 102 204;
+    --c-on-tertiary: 255 255 255;
+    --c-surface: 249 249 251;
+    --c-background: 249 249 251;
+    --c-error: 186 26 26;
+    --c-on-error: 255 255 255;
+    color-scheme: light;
+  }
+  html.dark {
+    --c-surface-bright: 28 28 32;
+    --c-surface-container-lowest: 26 26 30;
+    --c-surface-container-low: 34 34 38;
+    --c-surface-container: 40 40 45;
+    --c-surface-container-high: 48 48 53;
+    --c-surface-variant: 56 56 62;
+    --c-on-surface: 230 230 234;
+    --c-on-surface-variant: 200 195 196;
+    --c-outline: 143 137 138;
+    --c-outline-variant: 62 62 68;
+    --c-primary: 255 255 255;
+    --c-on-primary: 0 0 0;
+    --c-secondary: 169 169 176;
+    --c-on-secondary: 0 0 0;
+    --c-tertiary: 90 169 255;
+    --c-on-tertiary: 0 0 0;
+    --c-surface: 18 18 21;
+    --c-background: 18 18 21;
+    --c-error: 255 138 128;
+    --c-on-error: 0 0 0;
+    color-scheme: dark;
+  }
+  html.dark .soft-shadow{ box-shadow: 0px 10px 40px rgba(0,0,0,0.45); }
+  html.dark .bg-red-50{ background-color: rgba(255,138,128,0.12); }
   .material-symbols-outlined{ font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align:middle; }
   .soft-shadow{ box-shadow: 0px 10px 40px rgba(0,0,0,0.04); }
   .glass-panel{ backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -186,6 +245,217 @@ function defaultCatalog() {
 var PRODUCT_ORDER = ['todoo-glo', 'icex-40k', 'extre-100k', 'maskking-gts'];
 
 /* ------------------------------------------------------------------ */
+/*  Language (SR / EN) and theme (light / dark)                        */
+/* ------------------------------------------------------------------ */
+
+var LANG = 'sr';
+try {
+  var savedLang = localStorage.getItem('kd-lang');
+  if (savedLang === 'sr' || savedLang === 'en') LANG = savedLang;
+} catch (e) { /* storage blocked: stay on Serbian */ }
+
+var STRINGS = {
+  sr: {
+    navModels: 'Modeli',
+    navContact: 'Kontakt',
+    discordCommunity: 'Discord zajednica',
+    switchLang: 'Switch to English',
+    darkMode: 'Tamna tema',
+    lightMode: 'Svetla tema',
+    from: 'od',
+    pcs: 'kom',
+    flavorsCount: function (n) { return n + ' ukusa'; },
+    noModels: 'Trenutno nema modela na stanju — vrati se uskoro.',
+    heroTitle: 'Ukusi koji <span style="color:#FF6B4A">sijaju</span>, <span style="color:#3FC7EB">hlade</span> i <span style="color:#8B5CF6">gore</span>.',
+    heroText: 'Todoo GLO, Icex 40k, Extre 100k i Maskking GTS — pogledaj dostupne ukuse i cene po komadu ili po količini.',
+    viewModels: 'Pogledaj modele',
+    joinDiscord: 'Pridruži se Discord-u',
+    inStockOf: function (a, b) { return a + ' od ' + b + ' ukusa na stanju'; },
+    priceByQty: 'Cena zavisi od količine',
+    discordSupport: 'Podrška na Discordu',
+    modelsCaps: 'MODELI',
+    chooseModel: 'Izaberi svoj model.',
+    modelNotFound: 'Model nije pronađen.',
+    seriesFlavors: function (s) { return s + ' ukusi'; },
+    availableFlavors: 'Dostupni ukusi',
+    xOfY: function (a, b) { return a + ' od ' + b; },
+    noneInSeries: 'Trenutno nema dostupnih ukusa u ovoj seriji.',
+    low: 'malo',
+    backHome: 'Nazad na početnu',
+    perPiece: 'po komadu',
+    qtyPricing: 'Cene po količini',
+    decreaseQty: 'Umanji količinu',
+    increaseQty: 'Povećaj količinu',
+    total: 'Ukupno',
+    orderOnDiscord: 'PORUČI PREKO DISCORDA',
+    orderNote: 'Poručivanje i dogovor idu preko Discord servera',
+    contactTitle: 'Kontaktiraj',
+    contactText: 'Pitanja o ukusima, dostupnosti ili porudžbini? Pridruži se našem Discord serveru — tu najbrže odgovaramo.',
+    joinDiscordServer: 'Pridruži se Discord serveru',
+    gateText: 'Unesi šifru da bi menjao/la zalihe i cene.',
+    passcode: 'Šifra',
+    wrongPasscode: 'Pogrešna šifra, pokušaj ponovo.',
+    unlock: 'Otključaj',
+    saving: 'Čuva se…',
+    errorPrefix: 'Greška: ',
+    unknown: 'nepoznata',
+    tryAgainSuffix: ' — pokušaj ponovo',
+    saved: 'Sačuvano',
+    range: 'Opseg',
+    deleteRange: 'Obriši opseg',
+    fromPcs: 'Od (kom)',
+    toPcs: 'Do (kom)',
+    noLimit: 'bez granice',
+    pricePerPiece: 'Cena po komadu',
+    addRange: 'Dodaj opseg',
+    backToSite: 'Nazad na sajt',
+    lock: 'Zaključaj',
+    loadError: 'Nismo uspeli da učitamo najnovije podatke sa servera — prikazano je poslednje poznato stanje.',
+    tryAgain: 'Pokušaj ponovo',
+    adminSubtitle: 'Zalihe i cene po količini za ovaj model.',
+    sharedNote: 'Zalihe i cene se čuvaju na serveru (deljeno) — vidljive su odmah svim posetiocima sajta, na svim uređajima.',
+    flavorStock: 'Zalihe ukusa',
+    copied: 'Kopirano',
+    copyFailed: 'Nije uspelo',
+    copyList: 'Kopiraj listu',
+    searchFlavors: 'Pretraži ukuse...',
+    hiddenNote: 'Ukusi sa 0 na stanju su automatski skriveni sa glavnog sajta.',
+    overview: 'Pregled',
+    availableCount: 'Dostupnih ukusa',
+    totalPieces: 'Ukupno komada na stanju'
+  },
+  en: {
+    navModels: 'Models',
+    navContact: 'Contact',
+    discordCommunity: 'Discord community',
+    switchLang: 'Prebaci na srpski',
+    darkMode: 'Dark theme',
+    lightMode: 'Light theme',
+    from: 'from',
+    pcs: 'pcs',
+    flavorsCount: function (n) { return n + (n === 1 ? ' flavor' : ' flavors'); },
+    noModels: 'No models in stock right now — check back soon.',
+    heroTitle: 'Flavors that <span style="color:#FF6B4A">glow</span>, <span style="color:#3FC7EB">chill</span> and <span style="color:#8B5CF6">burn</span>.',
+    heroText: 'Todoo GLO, Icex 40k, Extre 100k and Maskking GTS — browse available flavors and prices per piece or by quantity.',
+    viewModels: 'View models',
+    joinDiscord: 'Join our Discord',
+    inStockOf: function (a, b) { return a + ' of ' + b + ' flavors in stock'; },
+    priceByQty: 'Price depends on quantity',
+    discordSupport: 'Support on Discord',
+    modelsCaps: 'MODELS',
+    chooseModel: 'Choose your model.',
+    modelNotFound: 'Model not found.',
+    seriesFlavors: function (s) { return s + ' flavors'; },
+    availableFlavors: 'Available flavors',
+    xOfY: function (a, b) { return a + ' of ' + b; },
+    noneInSeries: 'No flavors available in this series right now.',
+    low: 'low',
+    backHome: 'Back to home',
+    perPiece: 'per piece',
+    qtyPricing: 'Quantity pricing',
+    decreaseQty: 'Decrease quantity',
+    increaseQty: 'Increase quantity',
+    total: 'Total',
+    orderOnDiscord: 'ORDER ON DISCORD',
+    orderNote: 'Orders and arrangements are handled on our Discord server',
+    contactTitle: 'Contact',
+    contactText: 'Questions about flavors, availability or an order? Join our Discord server — that is where we reply fastest.',
+    joinDiscordServer: 'Join the Discord server',
+    gateText: 'Enter the passcode to edit stock and prices.',
+    passcode: 'Passcode',
+    wrongPasscode: 'Wrong passcode, try again.',
+    unlock: 'Unlock',
+    saving: 'Saving…',
+    errorPrefix: 'Error: ',
+    unknown: 'unknown',
+    tryAgainSuffix: ' — try again',
+    saved: 'Saved',
+    range: 'Range',
+    deleteRange: 'Delete range',
+    fromPcs: 'From (pcs)',
+    toPcs: 'To (pcs)',
+    noLimit: 'no limit',
+    pricePerPiece: 'Price per piece',
+    addRange: 'Add range',
+    backToSite: 'Back to site',
+    lock: 'Lock',
+    loadError: 'We could not load the latest data from the server — showing the last known state.',
+    tryAgain: 'Try again',
+    adminSubtitle: 'Stock and quantity pricing for this model.',
+    sharedNote: 'Stock and prices are saved on the server (shared) — every visitor sees them right away, on every device.',
+    flavorStock: 'Flavor stock',
+    copied: 'Copied',
+    copyFailed: 'Failed',
+    copyList: 'Copy list',
+    searchFlavors: 'Search flavors...',
+    hiddenNote: 'Flavors with 0 in stock are automatically hidden from the main site.',
+    overview: 'Overview',
+    availableCount: 'Available flavors',
+    totalPieces: 'Total pieces in stock'
+  }
+};
+
+function t(key) {
+  var s = STRINGS[LANG][key];
+  if (s === undefined) s = STRINGS.sr[key];
+  if (typeof s === 'function') return s.apply(null, Array.prototype.slice.call(arguments, 1));
+  return s;
+}
+
+// Same as t(). For code where a price tier variable named `t` hides t().
+function tr() {
+  return t.apply(null, arguments);
+}
+
+// Product descriptions live in the saved catalog (in Serbian). English
+// versions are kept here so switching language never touches saved data.
+var PRODUCT_TEXT_EN = {
+  'todoo-glo': {
+    categoryLabel: 'WARM FLAVORS',
+    tagline: 'Smooth, even flavor for every day.',
+    specsNote: 'Available in the classic and GTS flavor series.'
+  },
+  'icex-40k': {
+    categoryLabel: 'ICY FLAVORS',
+    tagline: '40,000 puffs of icy freshness.',
+    specsNote: '18 refreshing and fruity flavors.',
+    puffsLabel: '40,000 puffs'
+  },
+  'extre-100k': {
+    categoryLabel: 'INTENSE FLAVORS',
+    tagline: '100,000 puffs, flavor without compromise.',
+    specsNote: '16 intense, icy flavors.',
+    puffsLabel: '100,000 puffs'
+  },
+  'maskking-gts': {
+    categoryLabel: 'BOLD FLAVORS',
+    tagline: 'A rich range of fruity and menthol flavors.',
+    specsNote: '14 carefully selected flavors.'
+  }
+};
+
+function productText(p, field) {
+  var en = PRODUCT_TEXT_EN[p.id];
+  if (LANG === 'en' && en && en[field] !== undefined) return en[field];
+  return p[field];
+}
+
+function setLang(lang) {
+  LANG = lang;
+  document.documentElement.lang = lang;
+  try { localStorage.setItem('kd-lang', lang); } catch (e) { /* not persisted */ }
+}
+
+function isDark() {
+  return document.documentElement.classList.contains('dark');
+}
+
+function setTheme(dark) {
+  document.documentElement.classList.toggle('dark', dark);
+  try { localStorage.setItem('kd-theme', dark ? 'dark' : 'light'); } catch (e) { /* not persisted */ }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -206,9 +476,9 @@ function tierForQty(tiers, qty) {
 }
 
 function tierLabel(t) {
-  if (t.max === null || t.max === undefined || t.max === '') return t.min + '+ kom';
-  if (t.min === t.max) return t.min + ' kom';
-  return t.min + '–' + t.max + ' kom';
+  if (t.max === null || t.max === undefined || t.max === '') return t.min + '+ ' + tr('pcs');
+  if (t.min === t.max) return t.min + ' ' + tr('pcs');
+  return t.min + '–' + t.max + ' ' + tr('pcs');
 }
 
 function cheapestPrice(tiers) {
@@ -216,7 +486,7 @@ function cheapestPrice(tiers) {
 }
 
 function formatRSD(n) {
-  return n.toLocaleString('sr-RS') + ' RSD';
+  return n.toLocaleString(LANG === 'en' ? 'en-US' : 'sr-RS') + ' RSD';
 }
 
 function hashHue(str) {
@@ -410,10 +680,12 @@ function renderNav(route) {
       '<div class="flex justify-between items-center h-[64px] px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
         '<a class="text-lg font-semibold tracking-tight" href="#/">' + BRAND_NAME + '</a>' +
         '<nav class="hidden md:flex items-center gap-8">' +
-          '<a class="' + linkClass + (route.view === 'home' ? ' text-primary' : ' text-secondary') + '" href="#modeli">Modeli</a>' +
-          '<a class="' + linkClass + (route.view === 'contact' ? ' text-primary' : ' text-secondary') + '" href="#/contact">Kontakt</a>' +
+          '<a class="' + linkClass + (route.view === 'home' ? ' text-primary' : ' text-secondary') + '" href="#modeli">' + t('navModels') + '</a>' +
+          '<a class="' + linkClass + (route.view === 'contact' ? ' text-primary' : ' text-secondary') + '" href="#/contact">' + t('navContact') + '</a>' +
         '</nav>' +
-        '<div class="flex items-center gap-4">' +
+        '<div class="flex items-center gap-2 sm:gap-3">' +
+          '<button data-action="toggle-lang" aria-label="' + t('switchLang') + '" title="' + t('switchLang') + '" class="w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary transition-colors text-[12px] font-semibold tracking-[0.05em]">' + (LANG === 'sr' ? 'EN' : 'SR') + '</button>' +
+          '<button data-action="toggle-theme" aria-label="' + t(isDark() ? 'lightMode' : 'darkMode') + '" title="' + t(isDark() ? 'lightMode' : 'darkMode') + '" class="w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary transition-colors">' + icon(isDark() ? 'light_mode' : 'dark_mode', 'text-[18px]') + '</button>' +
           '<a class="' + linkClass + ' text-secondary hidden sm:flex items-center gap-1.5" href="#/admin">' + icon('settings', 'text-[18px]') + ' Admin</a>' +
           '<a class="' + linkClass + ' text-secondary sm:hidden" href="#/admin">' + icon('settings', 'text-[20px]') + '</a>' +
         '</div>' +
@@ -428,8 +700,8 @@ function renderFooter() {
       '<div class="flex flex-col items-center justify-center gap-6 px-margin-mobile max-w-container-max mx-auto text-center">' +
         '<span class="text-2xl font-semibold tracking-tight">' + BRAND_NAME + '</span>' +
         '<div class="flex flex-wrap items-center justify-center gap-6">' +
-          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors flex items-center gap-1.5" href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer">' + icon('forum', 'text-[16px]') + ' Discord zajednica</a>' +
-          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/contact">Kontakt</a>' +
+          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors flex items-center gap-1.5" href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer">' + icon('forum', 'text-[16px]') + ' ' + t('discordCommunity') + '</a>' +
+          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/contact">' + t('navContact') + '</a>' +
           '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/admin">Admin</a>' +
         '</div>' +
         '<p class="text-secondary text-label-caps font-label-caps">&copy; 2026 ' + BRAND_NAME + '.</p>' +
@@ -463,12 +735,12 @@ function renderHome() {
           '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[86%] w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105">' +
         '</div>' +
         '<div class="p-8 flex flex-col flex-1">' +
-          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-4" style="color:' + p.accent + '">' + icon(p.icon, 'text-[15px]') + p.categoryLabel + '</span>' +
+          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-4" style="color:' + p.accent + '">' + icon(p.icon, 'text-[15px]') + productText(p, 'categoryLabel') + '</span>' +
           '<h3 class="text-title-sm font-title-sm text-primary mb-2">' + p.name + '</h3>' +
-          '<p class="text-secondary text-body-md font-body-md mb-4 flex-1">' + p.tagline + '</p>' +
+          '<p class="text-secondary text-body-md font-body-md mb-4 flex-1">' + productText(p, 'tagline') + '</p>' +
           '<div class="flex items-center justify-between text-sm pt-4 border-t border-outline-variant/60">' +
-            '<span class="text-secondary">od <span class="text-primary font-medium">' + formatRSD(cheapest) + '</span></span>' +
-            '<span class="text-secondary">' + available + ' ukusa</span>' +
+            '<span class="text-secondary">' + t('from') + ' <span class="text-primary font-medium">' + formatRSD(cheapest) + '</span></span>' +
+            '<span class="text-secondary">' + t('flavorsCount', available) + '</span>' +
           '</div>' +
         '</div>' +
       '</a>'
@@ -476,7 +748,7 @@ function renderHome() {
   }).join('') || (
     '<div class="col-span-full text-center py-16 text-secondary">' +
       icon('inventory_2', 'text-[28px] block mx-auto mb-3') +
-      'Trenutno nema modela na stanju — vrati se uskoro.' +
+      t('noModels') +
     '</div>'
   );
 
@@ -484,24 +756,24 @@ function renderHome() {
     '<main class="pt-[64px]">' +
       '<section class="min-h-[560px] flex flex-col items-center justify-center text-center relative px-margin-mobile md:px-gutter pt-24 pb-16">' +
         '<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6 max-w-4xl">' +
-          'Ukusi koji <span style="color:#FF6B4A">sijaju</span>, <span style="color:#3FC7EB">hlade</span> i <span style="color:#8B5CF6">gore</span>.' +
+          t('heroTitle') +
         '</h1>' +
-        '<p class="text-body-lg font-body-lg text-secondary mb-10 max-w-2xl">Todoo GLO, Icex 40k, Extre 100k i Maskking GTS — pogledaj dostupne ukuse i cene po komadu ili po količini.</p>' +
+        '<p class="text-body-lg font-body-lg text-secondary mb-10 max-w-2xl">' + t('heroText') + '</p>' +
         '<div class="flex flex-col sm:flex-row items-center gap-4 mb-10">' +
-          '<a href="#modeli" class="bg-primary text-on-primary px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-85 transition-opacity">Pogledaj modele</a>' +
-          '<a href="#/contact" class="bg-transparent text-primary px-8 py-4 rounded-full text-label-caps font-label-caps border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2">' + icon('forum', 'text-[16px]') + ' Pridruži se Discord-u</a>' +
+          '<a href="#modeli" class="bg-primary text-on-primary px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-85 transition-opacity">' + t('viewModels') + '</a>' +
+          '<a href="#/contact" class="bg-transparent text-primary px-8 py-4 rounded-full text-label-caps font-label-caps border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2">' + icon('forum', 'text-[16px]') + ' ' + t('joinDiscord') + '</a>' +
         '</div>' +
         '<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-secondary text-sm">' +
-          '<span class="flex items-center gap-2">' + icon('inventory_2', 'text-[16px]') + totalAvailable + ' od ' + totalFlavors + ' ukusa na stanju</span>' +
-          '<span class="flex items-center gap-2">' + icon('local_offer', 'text-[16px]') + 'Cena zavisi od količine</span>' +
-          '<span class="flex items-center gap-2">' + icon('forum', 'text-[16px]') + 'Podrška na Discordu</span>' +
+          '<span class="flex items-center gap-2">' + icon('inventory_2', 'text-[16px]') + t('inStockOf', totalAvailable, totalFlavors) + '</span>' +
+          '<span class="flex items-center gap-2">' + icon('local_offer', 'text-[16px]') + t('priceByQty') + '</span>' +
+          '<span class="flex items-center gap-2">' + icon('forum', 'text-[16px]') + t('discordSupport') + '</span>' +
         '</div>' +
       '</section>' +
 
       '<section id="modeli" class="py-section-padding-sm px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
         '<div class="mb-10">' +
-          '<span class="text-label-caps font-label-caps text-secondary block mb-3">MODELI</span>' +
-          '<h2 class="text-headline-md-mobile md:text-headline-md font-headline-md-mobile md:font-headline-md text-primary">Izaberi svoj model.</h2>' +
+          '<span class="text-label-caps font-label-caps text-secondary block mb-3">' + t('modelsCaps') + '</span>' +
+          '<h2 class="text-headline-md-mobile md:text-headline-md font-headline-md-mobile md:font-headline-md text-primary">' + t('chooseModel') + '</h2>' +
         '</div>' +
         '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">' + cards + '</div>' +
       '</section>' +
@@ -515,7 +787,7 @@ function renderHome() {
 
 function renderProduct(id) {
   var p = catalog[id];
-  if (!p) return '<main class="pt-[64px] px-margin-mobile py-section-padding-sm text-center"><p>Model nije pronađen.</p></main>';
+  if (!p) return '<main class="pt-[64px] px-margin-mobile py-section-padding-sm text-center"><p>' + t('modelNotFound') + '</p></main>';
   if (lastProductId !== id) { productQty[id] = 1; lastProductId = id; }
   var qty = productQty[id] || 1;
   var tier = tierForQty(p.priceTiers, qty);
@@ -535,17 +807,17 @@ function renderProduct(id) {
   var groupsHtml = groups.map(function (pair) {
     var series = pair[0], list = pair[1];
     var inStock = list.filter(function (f) { return f.qty > 0; });
-    var head = '<div class="flex items-baseline justify-between mb-4"><h3 class="text-title-sm font-title-sm text-primary">' + (groups.length > 1 ? escapeHtml(series) + ' ukusi' : 'Dostupni ukusi') + '</h3><span class="text-secondary text-sm">' + inStock.length + ' od ' + list.length + '</span></div>';
+    var head = '<div class="flex items-baseline justify-between mb-4"><h3 class="text-title-sm font-title-sm text-primary">' + (groups.length > 1 ? t('seriesFlavors', escapeHtml(series)) : t('availableFlavors')) + '</h3><span class="text-secondary text-sm">' + t('xOfY', inStock.length, list.length) + '</span></div>';
     var body;
     if (inStock.length === 0) {
-      body = '<div class="flex items-center gap-2 text-secondary text-sm p-5 border border-dashed border-outline-variant rounded-xl">' + icon('inventory_2', 'text-[18px]') + 'Trenutno nema dostupnih ukusa u ovoj seriji.</div>';
+      body = '<div class="flex items-center gap-2 text-secondary text-sm p-5 border border-dashed border-outline-variant rounded-xl">' + icon('inventory_2', 'text-[18px]') + t('noneInSeries') + '</div>';
     } else {
       body = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">' + inStock.map(function (f) {
         return (
           '<div class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/60 text-sm relative">' +
             flavorOrb(f.name) +
             '<span class="text-on-surface leading-tight">' + escapeHtml(f.name) + '</span>' +
-            (f.qty <= 10 ? '<span class="absolute -top-2 -right-1 text-[9px] bg-surface-container-high text-secondary px-1.5 py-0.5 rounded-full">malo</span>' : '') +
+            (f.qty <= 10 ? '<span class="absolute -top-2 -right-1 text-[9px] bg-surface-container-high text-secondary px-1.5 py-0.5 rounded-full">' + t('low') + '</span>' : '') +
           '</div>'
         );
       }).join('') + '</div>';
@@ -555,39 +827,39 @@ function renderProduct(id) {
 
   return (
     '<main class="pt-[64px] max-w-container-max mx-auto px-margin-mobile md:px-gutter py-section-padding-sm">' +
-      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' Nazad na početnu</a>' +
+      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backHome') + '</a>' +
       '<div class="grid grid-cols-1 md:grid-cols-12 gap-y-10 md:gap-x-gutter">' +
         '<div class="md:col-span-6 bg-surface-container-low rounded-2xl soft-shadow flex items-center justify-center h-[380px] md:h-[560px] relative overflow-hidden">' +
           '<div class="absolute -top-16 -right-16 w-72 h-72 rounded-full blur-3xl opacity-60" style="background:' + p.accent + '22"></div>' +
           '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[85%] w-auto object-contain relative z-10">' +
         '</div>' +
         '<div class="md:col-span-6 flex flex-col justify-center">' +
-          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-3" style="color:' + p.accent + '">' + icon(p.icon, 'text-[16px]') + p.categoryLabel + '</span>' +
+          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-3" style="color:' + p.accent + '">' + icon(p.icon, 'text-[16px]') + productText(p, 'categoryLabel') + '</span>' +
           '<h1 class="text-display-lg-mobile md:text-headline-md font-display-lg-mobile md:font-headline-md text-primary mb-3">' + p.name + '</h1>' +
-          '<p class="text-body-lg font-body-lg text-secondary mb-1">od <span class="text-primary font-medium">' + formatRSD(cheapestPrice(p.priceTiers)) + '</span> po komadu' + (p.puffsLabel ? ' &middot; ' + p.puffsLabel : '') + '</p>' +
-          '<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mt-4">' + p.tagline + ' ' + p.specsNote + '</p>' +
+          '<p class="text-body-lg font-body-lg text-secondary mb-1">' + t('from') + ' <span class="text-primary font-medium">' + formatRSD(cheapestPrice(p.priceTiers)) + '</span> ' + t('perPiece') + (productText(p, 'puffsLabel') ? ' &middot; ' + productText(p, 'puffsLabel') : '') + '</p>' +
+          '<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mt-4">' + productText(p, 'tagline') + ' ' + productText(p, 'specsNote') + '</p>' +
 
           '<div class="bg-surface-container-low rounded-xl p-6 mt-8 soft-shadow">' +
             '<div class="flex items-start gap-3 mb-1">' +
               icon('local_offer', 'text-primary mt-0.5') +
-              '<h3 class="text-title-sm font-title-sm text-primary">Cene po količini</h3>' +
+              '<h3 class="text-title-sm font-title-sm text-primary">' + t('qtyPricing') + '</h3>' +
             '</div>' +
             '<div class="pl-9">' + tiersHtml + '</div>' +
           '</div>' +
 
           '<div class="flex items-center gap-4 mt-8">' +
             '<div class="flex items-center border border-outline-variant rounded-lg">' +
-              '<button aria-label="Umanji količinu" data-action="qty-delta" data-product="' + id + '" data-delta="-1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('remove') + '</button>' +
+              '<button aria-label="' + t('decreaseQty') + '" data-action="qty-delta" data-product="' + id + '" data-delta="-1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('remove') + '</button>' +
               '<input type="number" min="1" value="' + qty + '" data-action="qty-set" data-product="' + id + '" class="w-12 text-center border-none bg-transparent focus:outline-none text-body-md font-body-md">' +
-              '<button aria-label="Povećaj količinu" data-action="qty-delta" data-product="' + id + '" data-delta="1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('add') + '</button>' +
+              '<button aria-label="' + t('increaseQty') + '" data-action="qty-delta" data-product="' + id + '" data-delta="1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('add') + '</button>' +
             '</div>' +
-            '<span class="text-secondary text-sm">Ukupno <span class="text-primary font-semibold">' + formatRSD(total) + '</span></span>' +
+            '<span class="text-secondary text-sm">' + t('total') + ' <span class="text-primary font-semibold">' + formatRSD(total) + '</span></span>' +
           '</div>' +
 
           '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-primary text-on-primary py-4 rounded-lg text-label-caps font-label-caps hover:opacity-85 transition-opacity mt-4">' +
-            'PORUČI PREKO DISCORDA — ' + formatRSD(total) +
+            t('orderOnDiscord') + ' — ' + formatRSD(total) +
           '</a>' +
-          '<div class="flex items-center justify-center gap-2 pt-4 text-secondary text-label-caps font-label-caps">' + icon('forum', 'text-[16px]') + ' Poručivanje i dogovor idu preko Discord servera</div>' +
+          '<div class="flex items-center justify-center gap-2 pt-4 text-secondary text-label-caps font-label-caps">' + icon('forum', 'text-[16px]') + ' ' + t('orderNote') + '</div>' +
         '</div>' +
       '</div>' +
 
@@ -603,12 +875,12 @@ function renderProduct(id) {
 function renderContact() {
   return (
     '<main class="pt-[64px] max-w-xl mx-auto px-margin-mobile py-section-padding-sm text-center">' +
-      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' Nazad na početnu</a>' +
+      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backHome') + '</a>' +
       '<div class="bg-surface-container-lowest rounded-2xl soft-shadow p-10 md:p-14 flex flex-col items-center gap-5">' +
         '<span class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center">' + icon('forum', 'text-[26px] text-primary') + '</span>' +
-        '<h1 class="text-headline-md-mobile font-headline-md-mobile text-primary">Kontaktiraj ' + BRAND_NAME + '</h1>' +
-        '<p class="text-body-md font-body-md text-secondary leading-relaxed">Pitanja o ukusima, dostupnosti ili porudžbini? Pridruži se našem Discord serveru — tu najbrže odgovaramo.</p>' +
-        '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="bg-[#5865F2] text-white px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-90 transition-opacity flex items-center gap-2 mt-2">' + icon('forum', 'text-[18px]') + ' Pridruži se Discord serveru</a>' +
+        '<h1 class="text-headline-md-mobile font-headline-md-mobile text-primary">' + t('contactTitle') + ' ' + BRAND_NAME + '</h1>' +
+        '<p class="text-body-md font-body-md text-secondary leading-relaxed">' + t('contactText') + '</p>' +
+        '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="bg-[#5865F2] text-white px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-90 transition-opacity flex items-center gap-2 mt-2">' + icon('forum', 'text-[18px]') + ' ' + t('joinDiscordServer') + '</a>' +
         '<span class="text-secondary text-xs break-all">' + DISCORD_URL + '</span>' +
       '</div>' +
     '</main>'
@@ -625,10 +897,10 @@ function renderAdminGate() {
       '<form data-action="admin-unlock" class="bg-surface-container-lowest rounded-2xl soft-shadow p-10 max-w-sm w-full flex flex-col items-center gap-3 text-center">' +
         '<span class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center mb-1">' + icon('lock', 'text-primary') + '</span>' +
         '<h2 class="text-title-sm font-title-sm text-primary">Admin panel</h2>' +
-        '<p class="text-secondary text-sm">Unesi šifru da bi menjao/la zalihe i cene.</p>' +
-        '<input id="admin-code-input" type="password" autocomplete="off" placeholder="Šifra" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-4 py-3 text-center focus:ring-1 focus:ring-primary focus:border-primary outline-none mt-2">' +
-        (adminGateError ? '<span class="text-error text-xs">Pogrešna šifra, pokušaj ponovo.</span>' : '') +
-        '<button type="submit" class="w-full bg-primary text-on-primary rounded-lg py-3 text-label-caps font-label-caps hover:opacity-85 transition-opacity mt-2">Otključaj</button>' +
+        '<p class="text-secondary text-sm">' + t('gateText') + '</p>' +
+        '<input id="admin-code-input" type="password" autocomplete="off" placeholder="' + t('passcode') + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-4 py-3 text-center focus:ring-1 focus:ring-primary focus:border-primary outline-none mt-2">' +
+        (adminGateError ? '<span class="text-error text-xs">' + t('wrongPasscode') + '</span>' : '') +
+        '<button type="submit" class="w-full bg-primary text-on-primary rounded-lg py-3 text-label-caps font-label-caps hover:opacity-85 transition-opacity mt-2">' + t('unlock') + '</button>' +
       '</form>' +
     '</main>'
   );
@@ -636,16 +908,16 @@ function renderAdminGate() {
 
 function renderSaveStatus() {
   if (savingState === 'saving') {
-    return '<span id="save-status-pill" class="inline-flex items-center gap-1.5 text-xs text-secondary bg-surface-container-low px-3 py-1.5 rounded-full">' + icon('sync', 'text-[15px] animate-spin') + 'Čuva se…</span>';
+    return '<span id="save-status-pill" class="inline-flex items-center gap-1.5 text-xs text-secondary bg-surface-container-low px-3 py-1.5 rounded-full">' + icon('sync', 'text-[15px] animate-spin') + t('saving') + '</span>';
   }
   if (savingState === 'error') {
     return (
       '<button id="save-status-pill" data-action="retry-sync" title="' + escapeHtml(lastSyncError || '') + '" class="inline-flex items-center gap-1.5 text-xs text-error bg-red-50 px-3 py-1.5 rounded-full hover:opacity-80 transition-opacity">' +
-        icon('error', 'text-[15px]') + 'Greška: ' + escapeHtml(lastSyncError || 'nepoznata') + ' — pokušaj ponovo' +
+        icon('error', 'text-[15px]') + t('errorPrefix') + escapeHtml(lastSyncError || t('unknown')) + t('tryAgainSuffix') +
       '</button>'
     );
   }
-  return '<span id="save-status-pill" class="inline-flex items-center gap-1.5 text-xs text-secondary bg-surface-container-low px-3 py-1.5 rounded-full">' + icon('check_circle', 'text-[15px]') + 'Sačuvano</span>';
+  return '<span id="save-status-pill" class="inline-flex items-center gap-1.5 text-xs text-secondary bg-surface-container-low px-3 py-1.5 rounded-full">' + icon('check_circle', 'text-[15px]') + t('saved') + '</span>';
 }
 
 function updateSaveStatusPill() {
@@ -702,22 +974,22 @@ function renderAdminPanel() {
     return (
       '<div class="pb-5 mb-5 border-b border-surface-variant last:border-b-0 last:pb-0 last:mb-0">' +
         '<div class="flex items-center justify-between mb-3">' +
-          '<p class="text-label-caps font-label-caps text-secondary">Opseg ' + (i + 1) + '</p>' +
+          '<p class="text-label-caps font-label-caps text-secondary">' + tr('range') + ' ' + (i + 1) + '</p>' +
           (p.priceTiers.length > 1 ?
-            '<button data-action="tier-remove" data-tier="' + t.id + '" aria-label="Obriši opseg" class="text-secondary hover:text-error transition-colors">' + icon('delete', 'text-[16px]') + '</button>' : ''
+            '<button data-action="tier-remove" data-tier="' + t.id + '" aria-label="' + tr('deleteRange') + '" class="text-secondary hover:text-error transition-colors">' + icon('delete', 'text-[16px]') + '</button>' : ''
           ) +
         '</div>' +
         '<div class="flex items-center gap-3 mb-3">' +
           '<div class="flex-1">' +
-            '<label class="block text-xs text-secondary mb-1">Od (kom)</label>' +
+            '<label class="block text-xs text-secondary mb-1">' + tr('fromPcs') + '</label>' +
             '<input type="number" min="1" value="' + t.min + '" data-action="tier-min" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
           '</div>' +
           '<div class="flex-1">' +
-            '<label class="block text-xs text-secondary mb-1">Do (kom)</label>' +
-            '<input type="number" min="1" value="' + ((t.max === null || t.max === undefined) ? '' : t.max) + '" placeholder="bez granice" data-action="tier-max" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
+            '<label class="block text-xs text-secondary mb-1">' + tr('toPcs') + '</label>' +
+            '<input type="number" min="1" value="' + ((t.max === null || t.max === undefined) ? '' : t.max) + '" placeholder="' + tr('noLimit') + '" data-action="tier-max" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
           '</div>' +
         '</div>' +
-        '<label class="block text-xs text-secondary mb-1">Cena po komadu</label>' +
+        '<label class="block text-xs text-secondary mb-1">' + tr('pricePerPiece') + '</label>' +
         '<div class="flex items-center gap-2">' +
           '<input type="number" min="0" value="' + t.price + '" data-action="tier-price" data-tier="' + t.id + '" class="w-full bg-surface-bright border border-surface-variant rounded-lg px-3 py-2 text-primary text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none">' +
           '<span class="text-secondary text-sm shrink-0">RSD</span>' +
@@ -726,7 +998,7 @@ function renderAdminPanel() {
     );
   }).join('') + (
     '<button data-action="tier-add" class="w-full flex items-center justify-center gap-1.5 text-sm text-primary border border-dashed border-outline-variant rounded-lg py-2.5 hover:bg-surface-bright transition-colors mt-1">' +
-      icon('add', 'text-[16px]') + 'Dodaj opseg' +
+      icon('add', 'text-[16px]') + t('addRange') +
     '</button>'
   );
 
@@ -742,55 +1014,55 @@ function renderAdminPanel() {
         '</div>' +
         sidebarLinks +
         '<div class="mt-auto flex flex-col gap-1 pt-4 border-t border-surface-variant">' +
-          '<a href="#/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-surface-variant/60 transition-colors text-sm">' + icon('arrow_back', 'text-[18px]') + ' Nazad na sajt</a>' +
-          '<button data-action="admin-lock" class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-surface-variant/60 transition-colors text-sm text-left">' + icon('logout', 'text-[18px]') + ' Zaključaj</button>' +
+          '<a href="#/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-surface-variant/60 transition-colors text-sm">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backToSite') + '</a>' +
+          '<button data-action="admin-lock" class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-surface-variant/60 transition-colors text-sm text-left">' + icon('logout', 'text-[18px]') + ' ' + t('lock') + '</button>' +
         '</div>' +
       '</aside>' +
 
       '<main class="flex-1 p-6 md:p-10 max-w-[1400px]">' +
         (catalogLoadError ?
           '<div class="flex items-center justify-between gap-3 bg-red-50 text-error text-sm px-4 py-3 rounded-lg mb-5">' +
-            '<span class="flex items-center gap-2">' + icon('error', 'text-[18px]') + 'Nismo uspeli da učitamo najnovije podatke sa servera — prikazano je poslednje poznato stanje.</span>' +
-            '<button data-action="retry-load" class="underline shrink-0">Pokušaj ponovo</button>' +
+            '<span class="flex items-center gap-2">' + icon('error', 'text-[18px]') + t('loadError') + '</span>' +
+            '<button data-action="retry-load" class="underline shrink-0">' + t('tryAgain') + '</button>' +
           '</div>' : ''
         ) +
         '<div class="flex flex-wrap justify-between items-end gap-4 mb-3">' +
           '<div>' +
             '<h2 class="text-headline-md-mobile font-headline-md-mobile text-primary">' + p.name + '</h2>' +
-            '<p class="text-secondary text-sm mt-1">Zalihe i cene po količini za ovaj model.</p>' +
+            '<p class="text-secondary text-sm mt-1">' + t('adminSubtitle') + '</p>' +
           '</div>' +
           renderSaveStatus() +
         '</div>' +
-        '<p class="text-xs text-secondary mb-8 max-w-2xl">Zalihe i cene se čuvaju na serveru (deljeno) — vidljive su odmah svim posetiocima sajta, na svim uređajima.</p>' +
+        '<p class="text-xs text-secondary mb-8 max-w-2xl">' + t('sharedNote') + '</p>' +
 
         '<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">' +
           '<div class="xl:col-span-2 bg-surface-container-lowest rounded-xl soft-shadow p-6 md:p-8">' +
             '<div class="flex flex-wrap justify-between items-center gap-4 mb-2">' +
-              '<h3 class="text-title-sm font-title-sm text-primary flex items-center gap-2">' + icon('inventory_2', 'text-[20px]') + 'Zalihe ukusa</h3>' +
+              '<h3 class="text-title-sm font-title-sm text-primary flex items-center gap-2">' + icon('inventory_2', 'text-[20px]') + t('flavorStock') + '</h3>' +
               '<div class="flex items-center gap-2">' +
                 '<button data-action="copy-list" class="inline-flex items-center gap-1.5 text-sm border border-outline-variant rounded-lg px-3 py-2 text-primary hover:bg-surface-bright transition-colors shrink-0">' +
                   icon(copyFeedback === 'copied' ? 'check' : 'content_copy', 'text-[16px]') +
-                  (copyFeedback === 'copied' ? 'Kopirano' : (copyFeedback === 'failed' ? 'Nije uspelo' : 'Kopiraj listu')) +
+                  (copyFeedback === 'copied' ? t('copied') : (copyFeedback === 'failed' ? t('copyFailed') : t('copyList'))) +
                 '</button>' +
                 '<div class="relative">' +
                   icon('search', 'absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[16px]') +
-                  '<input type="text" value="' + escapeHtml(adminSearch) + '" data-action="admin-search" placeholder="Pretraži ukuse..." class="bg-surface-bright border-none text-sm py-2 pl-9 pr-3 rounded-lg focus:ring-1 focus:ring-primary w-full sm:w-56">' +
+                  '<input type="text" value="' + escapeHtml(adminSearch) + '" data-action="admin-search" placeholder="' + t('searchFlavors') + '" class="bg-surface-bright border-none text-sm py-2 pl-9 pr-3 rounded-lg focus:ring-1 focus:ring-primary w-full sm:w-56">' +
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<p class="text-secondary text-xs mb-4">Ukusi sa 0 na stanju su automatski skriveni sa glavnog sajta.</p>' +
+            '<p class="text-secondary text-xs mb-4">' + t('hiddenNote') + '</p>' +
             '<div id="stock-list-region">' + renderStockList(p, adminSearch) + '</div>' +
           '</div>' +
 
           '<div class="xl:col-span-1 flex flex-col gap-6">' +
             '<div class="bg-surface-container-lowest rounded-xl soft-shadow p-6 md:p-8">' +
-              '<h3 class="text-title-sm font-title-sm text-primary mb-6 flex items-center gap-2">' + icon('local_offer', 'text-[20px]') + 'Cene po količini</h3>' +
+              '<h3 class="text-title-sm font-title-sm text-primary mb-6 flex items-center gap-2">' + icon('local_offer', 'text-[20px]') + t('qtyPricing') + '</h3>' +
               '<div>' + tiersHtml + '</div>' +
             '</div>' +
             '<div class="bg-surface-container-lowest rounded-xl soft-shadow p-6 md:p-8">' +
-              '<h3 class="text-label-caps font-label-caps text-secondary mb-4">Pregled</h3>' +
-              '<div class="flex justify-between py-2 border-b border-surface-variant text-sm"><span class="text-secondary">Dostupnih ukusa</span><span class="font-medium text-primary">' + availableCount + ' / ' + p.flavors.length + '</span></div>' +
-              '<div class="flex justify-between py-2 text-sm"><span class="text-secondary">Ukupno komada na stanju</span><span class="font-medium text-primary">' + totalStock + '</span></div>' +
+              '<h3 class="text-label-caps font-label-caps text-secondary mb-4">' + t('overview') + '</h3>' +
+              '<div class="flex justify-between py-2 border-b border-surface-variant text-sm"><span class="text-secondary">' + t('availableCount') + '</span><span class="font-medium text-primary">' + availableCount + ' / ' + p.flavors.length + '</span></div>' +
+              '<div class="flex justify-between py-2 text-sm"><span class="text-secondary">' + t('totalPieces') + '</span><span class="font-medium text-primary">' + totalStock + '</span></div>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -832,7 +1104,7 @@ function renderApp() {
     body = renderProduct(route.id) + renderFooter();
     document.title = (pr ? pr.name + ' — ' : '') + BRAND_NAME;
   }
-  else if (route.view === 'contact') { body = renderContact() + renderFooter(); document.title = 'Kontakt — ' + BRAND_NAME; }
+  else if (route.view === 'contact') { body = renderContact() + renderFooter(); document.title = t('navContact') + ' — ' + BRAND_NAME; }
   else if (route.view === 'admin') { body = adminUnlocked ? renderAdminPanel() : renderAdminGate() + renderFooter(); document.title = 'Admin — ' + BRAND_NAME; }
 
   app.innerHTML = renderNav(route) + body;
@@ -866,6 +1138,7 @@ function renderApp() {
 /* ------------------------------------------------------------------ */
 
 document.addEventListener('DOMContentLoaded', function () {
+  document.documentElement.lang = LANG;
   if (!location.hash) location.hash = '#/';
   window.addEventListener('hashchange', renderApp);
 
@@ -889,6 +1162,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var el = e.target.closest('[data-action]');
     if (!el) return;
     var action = el.dataset.action;
+
+    if (action === 'toggle-theme') {
+      setTheme(!isDark());
+      renderApp();
+      return;
+    }
+    if (action === 'toggle-lang') {
+      setLang(LANG === 'sr' ? 'en' : 'sr');
+      renderApp();
+      return;
+    }
 
     if (action === 'qty-delta') {
       var pid = el.dataset.product;
