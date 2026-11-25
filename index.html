@@ -686,8 +686,6 @@ function renderNav(route) {
         '<div class="flex items-center gap-2 sm:gap-3">' +
           '<button data-action="toggle-lang" aria-label="' + t('switchLang') + '" title="' + t('switchLang') + '" class="w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary transition-colors text-[12px] font-semibold tracking-[0.05em]">' + (LANG === 'sr' ? 'EN' : 'SR') + '</button>' +
           '<button data-action="toggle-theme" aria-label="' + t(isDark() ? 'lightMode' : 'darkMode') + '" title="' + t(isDark() ? 'lightMode' : 'darkMode') + '" class="w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary transition-colors">' + icon(isDark() ? 'light_mode' : 'dark_mode', 'text-[18px]') + '</button>' +
-          '<a class="' + linkClass + ' text-secondary hidden sm:flex items-center gap-1.5" href="#/admin">' + icon('settings', 'text-[18px]') + ' Admin</a>' +
-          '<a class="' + linkClass + ' text-secondary sm:hidden" href="#/admin">' + icon('settings', 'text-[20px]') + '</a>' +
         '</div>' +
       '</div>' +
     '</header>'
@@ -702,7 +700,6 @@ function renderFooter() {
         '<div class="flex flex-wrap items-center justify-center gap-6">' +
           '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors flex items-center gap-1.5" href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer">' + icon('forum', 'text-[16px]') + ' ' + t('discordCommunity') + '</a>' +
           '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/contact">' + t('navContact') + '</a>' +
-          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/admin">Admin</a>' +
         '</div>' +
         '<p class="text-secondary text-label-caps font-label-caps">&copy; 2026 ' + BRAND_NAME + '.</p>' +
       '</div>' +
