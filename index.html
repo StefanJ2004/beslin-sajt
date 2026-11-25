@@ -125,6 +125,85 @@ tailwind.config = {
   .accent-todoo-glo{ --accent:#FF6B4A; --accent-soft:rgba(255,107,74,0.10); }
   .accent-icex-40k{ --accent:#3FC7EB; --accent-soft:rgba(63,199,235,0.10); }
   .accent-extre-100k{ --accent:#8B5CF6; --accent-soft:rgba(139,92,246,0.10); }
+
+  /* ---- Motion ------------------------------------------------------ */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(40px, -30px) scale(1.08); }
+    66%  { transform: translate(-30px, 20px) scale(0.94); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+
+  /* Entrance animation, only on the first render of a page (not on every
+     re-render caused by a click), so nothing re-animates while in use. */
+  #app.entering .anim-up { animation: fadeUp .9s cubic-bezier(.16,1,.3,1) both; animation-delay: var(--d, 0ms); }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.instant { transition: none; }
+
+  /* Loading spinner while the catalog is fetched on first visit */
+  #app.booting { min-height: 100vh; }
+  #app.booting::before {
+    content: ''; position: fixed; top: 50%; left: 50%; width: 28px; height: 28px; margin: -14px 0 0 -14px;
+    border-radius: 50%; border: 2px solid rgb(var(--c-outline-variant)); border-top-color: rgb(var(--c-primary));
+    animation: spin .8s linear infinite;
+  }
+
+  /* ---- Decorative --------------------------------------------------- */
+  .hero-orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .28; animation: drift 20s ease-in-out infinite; pointer-events: none; }
+  html.dark .hero-orb { opacity: .2; }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgb(var(--c-outline-variant) / .45) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--c-outline-variant) / .45) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 72%);
+            mask-image: radial-gradient(ellipse at center, #000 20%, transparent 72%);
+  }
+  .grad-word {
+    background: linear-gradient(90deg, var(--a), var(--b), var(--a));
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 7s linear infinite;
+  }
+  .brand-dot { width: 10px; height: 10px; border-radius: 50%; background: conic-gradient(#FF6B4A, #3FC7EB, #8B5CF6, #E11D48, #FF6B4A); animation: spin 8s linear infinite; }
+  .live-dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+  .live-dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #22c55e; animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+  .float-slow { animation: floatY 6s ease-in-out infinite; }
+
+  /* ---- Interaction -------------------------------------------------- */
+  #site-header { transition: border-color .3s, box-shadow .3s, background-color .3s; }
+  #site-header.scrolled { border-bottom-color: rgb(var(--c-outline-variant) / .7); box-shadow: 0 10px 30px -18px rgba(0,0,0,.25); }
+  .nav-link { position: relative; }
+  .nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.16,1,.3,1); }
+  .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+  .card-lift { transition: transform .6s cubic-bezier(.16,1,.3,1), box-shadow .6s cubic-bezier(.16,1,.3,1), border-color .6s; }
+  .card-lift:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -28px var(--accent-glow, rgba(0,0,0,.25)); border-color: var(--accent-glow, transparent); }
+  .reveal.in.card-lift { transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1), box-shadow .6s, border-color .6s; }
+  .btn-primary { transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .3s, opacity .2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -12px rgb(var(--c-primary) / .45); }
+  .btn-primary:active, .btn-ghost:active { transform: scale(.97); }
+  .btn-ghost { transition: transform .25s cubic-bezier(.16,1,.3,1), background-color .3s, border-color .3s; }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: rgb(var(--c-outline)); }
+  .arrow-slide .material-symbols-outlined, .arrow-back .material-symbols-outlined { transition: transform .35s cubic-bezier(.16,1,.3,1); }
+  .arrow-slide:hover .material-symbols-outlined, .group:hover .arrow-slide .material-symbols-outlined { transform: translateX(4px); }
+  .arrow-back:hover .material-symbols-outlined { transform: translateX(-4px); }
+  .chip { transition: transform .3s cubic-bezier(.16,1,.3,1), border-color .3s, box-shadow .3s, opacity .9s cubic-bezier(.16,1,.3,1); }
+  .chip:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 24px -14px var(--accent); }
+  .qty-btn { transition: background-color .2s, transform .15s; }
+  .qty-btn:active { transform: scale(.9); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
   .accent-maskking-gts{ --accent:#E11D48; --accent-soft:rgba(225,29,72,0.10); }
 </style>
 </head>
@@ -266,7 +345,7 @@ var STRINGS = {
     pcs: 'kom',
     flavorsCount: function (n) { return n + ' ukusa'; },
     noModels: 'Trenutno nema modela na stanju — vrati se uskoro.',
-    heroTitle: 'Ukusi koji <span style="color:#FF6B4A">sijaju</span>, <span style="color:#3FC7EB">hlade</span> i <span style="color:#8B5CF6">gore</span>.',
+    heroTitle: 'Ukusi koji <span class="grad-word" style="--a:#FF6B4A;--b:#FFB199">sijaju</span>, <span class="grad-word" style="--a:#3FC7EB;--b:#9BE7FF">hlade</span> i <span class="grad-word" style="--a:#8B5CF6;--b:#CDB8FF">gore</span>.',
     heroText: 'Todoo GLO, Icex 40k, Extre 100k i Maskking GTS — pogledaj dostupne ukuse i cene po komadu ili po količini.',
     viewModels: 'Pogledaj modele',
     joinDiscord: 'Pridruži se Discord-u',
@@ -335,7 +414,7 @@ var STRINGS = {
     pcs: 'pcs',
     flavorsCount: function (n) { return n + (n === 1 ? ' flavor' : ' flavors'); },
     noModels: 'No models in stock right now — check back soon.',
-    heroTitle: 'Flavors that <span style="color:#FF6B4A">glow</span>, <span style="color:#3FC7EB">chill</span> and <span style="color:#8B5CF6">burn</span>.',
+    heroTitle: 'Flavors that <span class="grad-word" style="--a:#FF6B4A;--b:#FFB199">glow</span>, <span class="grad-word" style="--a:#3FC7EB;--b:#9BE7FF">chill</span> and <span class="grad-word" style="--a:#8B5CF6;--b:#CDB8FF">burn</span>.',
     heroText: 'Todoo GLO, Icex 40k, Extre 100k and Maskking GTS — browse available flavors and prices per piece or by quantity.',
     viewModels: 'View models',
     joinDiscord: 'Join our Discord',
@@ -659,6 +738,42 @@ var copyFeedback = null; // null | 'copied' | 'failed'
 var copyFeedbackTimer = null;
 var productQty = {};
 var lastProductId = null;
+var lastRouteKey = null;
+var enterTimer = null;
+var revealObserver = null;
+var revealed = {};
+
+// Scroll-reveal for elements marked data-reveal="<stable key>". Because the
+// whole page is re-rendered on every click, keys already revealed are shown
+// instantly on later renders instead of animating in again.
+function setupReveal() {
+  if (revealObserver) revealObserver.disconnect();
+  var els = document.querySelectorAll('[data-reveal]');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      // Stagger via JS: a CSS transition-delay would also slow hover effects.
+      var el = entry.target;
+      var delay = parseInt(el.style.getPropertyValue('--d'), 10) || 0;
+      setTimeout(function () { el.classList.add('in'); }, delay);
+      revealed[el.dataset.reveal] = true;
+      revealObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (el) {
+    if (revealed[el.dataset.reveal]) el.classList.add('in', 'instant');
+    else revealObserver.observe(el);
+  });
+}
+
+function updateHeaderShadow() {
+  var header = document.getElementById('site-header');
+  if (header) header.classList.toggle('scrolled', window.scrollY > 8);
+}
 
 /* ------------------------------------------------------------------ */
 /*  Shared chrome                                                      */
@@ -674,18 +789,19 @@ function parseRoute() {
 }
 
 function renderNav(route) {
-  var linkClass = 'font-medium text-[12px] uppercase tracking-[0.05em] transition-opacity hover:opacity-70';
+  var linkClass = 'nav-link font-medium text-[12px] uppercase tracking-[0.08em] transition-colors hover:text-primary';
+  var iconBtn = 'w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary hover:border-outline transition-all duration-300 hover:-translate-y-0.5 active:scale-95';
   return (
-    '<header class="fixed top-0 w-full z-50 bg-surface/70 glass-panel border-b border-outline-variant/60">' +
+    '<header id="site-header" class="fixed top-0 w-full z-50 bg-surface/70 glass-panel border-b border-transparent' + (window.scrollY > 8 ? ' scrolled' : '') + '">' +
       '<div class="flex justify-between items-center h-[64px] px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
-        '<a class="text-lg font-semibold tracking-tight" href="#/">' + BRAND_NAME + '</a>' +
+        '<a class="flex items-center gap-2.5 text-lg font-semibold tracking-tight" href="#/"><span class="brand-dot"></span>' + BRAND_NAME + '</a>' +
         '<nav class="hidden md:flex items-center gap-8">' +
-          '<a class="' + linkClass + (route.view === 'home' ? ' text-primary' : ' text-secondary') + '" href="#modeli">' + t('navModels') + '</a>' +
-          '<a class="' + linkClass + (route.view === 'contact' ? ' text-primary' : ' text-secondary') + '" href="#/contact">' + t('navContact') + '</a>' +
+          '<a class="' + linkClass + (route.view === 'home' ? ' active text-primary' : ' text-secondary') + '" href="#modeli">' + t('navModels') + '</a>' +
+          '<a class="' + linkClass + (route.view === 'contact' ? ' active text-primary' : ' text-secondary') + '" href="#/contact">' + t('navContact') + '</a>' +
         '</nav>' +
         '<div class="flex items-center gap-2 sm:gap-3">' +
-          '<button data-action="toggle-lang" aria-label="' + t('switchLang') + '" title="' + t('switchLang') + '" class="w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary transition-colors text-[12px] font-semibold tracking-[0.05em]">' + (LANG === 'sr' ? 'EN' : 'SR') + '</button>' +
-          '<button data-action="toggle-theme" aria-label="' + t(isDark() ? 'lightMode' : 'darkMode') + '" title="' + t(isDark() ? 'lightMode' : 'darkMode') + '" class="w-9 h-9 flex items-center justify-center rounded-full border border-outline-variant text-secondary hover:text-primary transition-colors">' + icon(isDark() ? 'light_mode' : 'dark_mode', 'text-[18px]') + '</button>' +
+          '<button data-action="toggle-lang" aria-label="' + t('switchLang') + '" title="' + t('switchLang') + '" class="' + iconBtn + ' text-[12px] font-semibold tracking-[0.05em]">' + (LANG === 'sr' ? 'EN' : 'SR') + '</button>' +
+          '<button data-action="toggle-theme" aria-label="' + t(isDark() ? 'lightMode' : 'darkMode') + '" title="' + t(isDark() ? 'lightMode' : 'darkMode') + '" class="' + iconBtn + '">' + icon(isDark() ? 'light_mode' : 'dark_mode', 'text-[18px]') + '</button>' +
         '</div>' +
       '</div>' +
     '</header>'
@@ -693,13 +809,15 @@ function renderNav(route) {
 }
 
 function renderFooter() {
+  var footLink = 'text-secondary text-label-caps font-label-caps hover:text-primary transition-colors';
   return (
-    '<footer class="w-full py-section-padding-sm bg-surface-bright border-t border-outline-variant">' +
+    '<footer class="relative w-full py-section-padding-sm bg-surface-bright border-t border-outline-variant">' +
+      '<div class="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px opacity-70" style="background:linear-gradient(90deg,transparent,#FF6B4A,#3FC7EB,#8B5CF6,transparent)"></div>' +
       '<div class="flex flex-col items-center justify-center gap-6 px-margin-mobile max-w-container-max mx-auto text-center">' +
-        '<span class="text-2xl font-semibold tracking-tight">' + BRAND_NAME + '</span>' +
+        '<span class="flex items-center gap-2.5 text-2xl font-semibold tracking-tight"><span class="brand-dot"></span>' + BRAND_NAME + '</span>' +
         '<div class="flex flex-wrap items-center justify-center gap-6">' +
-          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors flex items-center gap-1.5" href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer">' + icon('forum', 'text-[16px]') + ' ' + t('discordCommunity') + '</a>' +
-          '<a class="text-secondary text-label-caps font-label-caps hover:text-primary transition-colors" href="#/contact">' + t('navContact') + '</a>' +
+          '<a class="' + footLink + ' flex items-center gap-1.5" href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer">' + icon('forum', 'text-[16px]') + ' ' + t('discordCommunity') + '</a>' +
+          '<a class="' + footLink + '" href="#/contact">' + t('navContact') + '</a>' +
         '</div>' +
         '<p class="text-secondary text-label-caps font-label-caps">&copy; 2026 ' + BRAND_NAME + '.</p>' +
       '</div>' +
@@ -721,23 +839,23 @@ function renderHome() {
     return catalog[id].flavors.some(function (f) { return f.qty > 0; });
   });
 
-  var cards = visibleProducts.map(function (id) {
+  var cards = visibleProducts.map(function (id, i) {
     var p = catalog[id];
     var available = p.flavors.filter(function (f) { return f.qty > 0; }).length;
     var cheapest = cheapestPrice(p.priceTiers);
     return (
-      '<a href="#/product/' + id + '" class="accent-' + id + ' group reveal-up active bg-surface-container-lowest rounded-[24px] soft-shadow overflow-hidden flex flex-col">' +
+      '<a href="#/product/' + id + '" data-reveal="card-' + id + '" style="--d:' + (i * 90) + 'ms;--accent-glow:' + p.accent + '66" class="accent-' + id + ' reveal card-lift group bg-surface-container-lowest rounded-[24px] soft-shadow overflow-hidden flex flex-col border border-outline-variant/40">' +
         '<div class="h-64 md:h-72 flex items-center justify-center bg-surface-container-low relative overflow-hidden">' +
-          '<div class="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-70" style="background:' + p.accent + '22"></div>' +
-          '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[86%] w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105">' +
+          '<div class="absolute -top-10 -right-10 w-44 h-44 rounded-full blur-3xl opacity-60 transition-all duration-700 group-hover:opacity-100 group-hover:scale-125" style="background:' + p.accent + '33"></div>' +
+          '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[86%] w-auto object-contain relative z-10 transition-transform duration-700 ease-out group-hover:scale-[1.06] group-hover:-translate-y-2 group-hover:-rotate-2">' +
         '</div>' +
-        '<div class="p-8 flex flex-col flex-1">' +
-          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-4" style="color:' + p.accent + '">' + icon(p.icon, 'text-[15px]') + productText(p, 'categoryLabel') + '</span>' +
-          '<h3 class="text-title-sm font-title-sm text-primary mb-2">' + p.name + '</h3>' +
-          '<p class="text-secondary text-body-md font-body-md mb-4 flex-1">' + productText(p, 'tagline') + '</p>' +
+        '<div class="p-7 flex flex-col flex-1">' +
+          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] mb-4" style="color:' + p.accent + '">' + icon(p.icon, 'text-[15px]') + productText(p, 'categoryLabel') + '</span>' +
+          '<h3 class="text-title-sm font-title-sm text-primary mb-2 tracking-tight">' + p.name + '</h3>' +
+          '<p class="text-secondary text-body-md font-body-md mb-5 flex-1">' + productText(p, 'tagline') + '</p>' +
           '<div class="flex items-center justify-between text-sm pt-4 border-t border-outline-variant/60">' +
-            '<span class="text-secondary">' + t('from') + ' <span class="text-primary font-medium">' + formatRSD(cheapest) + '</span></span>' +
-            '<span class="text-secondary">' + t('flavorsCount', available) + '</span>' +
+            '<span class="text-secondary">' + t('from') + ' <span class="text-primary font-semibold tabular-nums">' + formatRSD(cheapest) + '</span></span>' +
+            '<span class="arrow-slide inline-flex items-center gap-1 text-secondary group-hover:text-primary transition-colors">' + t('flavorsCount', available) + icon('arrow_forward', 'text-[16px]') + '</span>' +
           '</div>' +
         '</div>' +
       '</a>'
@@ -751,26 +869,31 @@ function renderHome() {
 
   return (
     '<main class="pt-[64px]">' +
-      '<section class="min-h-[560px] flex flex-col items-center justify-center text-center relative px-margin-mobile md:px-gutter pt-24 pb-16">' +
-        '<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6 max-w-4xl">' +
-          t('heroTitle') +
-        '</h1>' +
-        '<p class="text-body-lg font-body-lg text-secondary mb-10 max-w-2xl">' + t('heroText') + '</p>' +
-        '<div class="flex flex-col sm:flex-row items-center gap-4 mb-10">' +
-          '<a href="#modeli" class="bg-primary text-on-primary px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-85 transition-opacity">' + t('viewModels') + '</a>' +
-          '<a href="#/contact" class="bg-transparent text-primary px-8 py-4 rounded-full text-label-caps font-label-caps border border-outline-variant hover:bg-surface-variant transition-colors flex items-center gap-2">' + icon('forum', 'text-[16px]') + ' ' + t('joinDiscord') + '</a>' +
-        '</div>' +
-        '<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-secondary text-sm">' +
-          '<span class="flex items-center gap-2">' + icon('inventory_2', 'text-[16px]') + t('inStockOf', totalAvailable, totalFlavors) + '</span>' +
-          '<span class="flex items-center gap-2">' + icon('local_offer', 'text-[16px]') + t('priceByQty') + '</span>' +
-          '<span class="flex items-center gap-2">' + icon('forum', 'text-[16px]') + t('discordSupport') + '</span>' +
+      '<section class="relative overflow-hidden">' +
+        '<div class="grid-bg absolute inset-0 pointer-events-none"></div>' +
+        '<span class="hero-orb" style="width:420px;height:420px;background:#FF6B4A;top:-140px;left:-120px"></span>' +
+        '<span class="hero-orb" style="width:380px;height:380px;background:#3FC7EB;top:20px;right:-140px;animation-delay:-7s"></span>' +
+        '<span class="hero-orb" style="width:340px;height:340px;background:#8B5CF6;bottom:-200px;left:38%;animation-delay:-13s"></span>' +
+        '<div class="absolute inset-x-0 bottom-0 h-40 pointer-events-none" style="background:linear-gradient(to bottom,transparent,rgb(var(--c-surface)))"></div>' +
+        '<div class="relative min-h-[620px] flex flex-col items-center justify-center text-center px-margin-mobile md:px-gutter pt-24 pb-20">' +
+          '<span class="anim-up inline-flex items-center gap-2.5 text-xs font-medium text-secondary bg-surface-container-lowest/80 border border-outline-variant/70 rounded-full pl-3 pr-4 py-1.5 mb-8 glass-panel" style="--d:0ms"><span class="live-dot"></span>' + t('inStockOf', totalAvailable, totalFlavors) + '</span>' +
+          '<h1 class="anim-up font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg tracking-[-0.03em] text-primary mb-6 max-w-4xl" style="--d:90ms">' + t('heroTitle') + '</h1>' +
+          '<p class="anim-up text-body-lg font-body-lg text-secondary mb-10 max-w-2xl" style="--d:180ms">' + t('heroText') + '</p>' +
+          '<div class="anim-up flex flex-col sm:flex-row items-center gap-3 mb-12" style="--d:270ms">' +
+            '<a href="#modeli" class="btn-primary arrow-slide bg-primary text-on-primary px-8 py-4 rounded-full text-label-caps font-label-caps inline-flex items-center gap-2">' + t('viewModels') + icon('arrow_forward', 'text-[16px]') + '</a>' +
+            '<a href="#/contact" class="btn-ghost bg-surface-container-lowest/60 glass-panel text-primary px-8 py-4 rounded-full text-label-caps font-label-caps border border-outline-variant inline-flex items-center gap-2">' + icon('forum', 'text-[16px]') + ' ' + t('joinDiscord') + '</a>' +
+          '</div>' +
+          '<div class="anim-up flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-secondary text-sm" style="--d:360ms">' +
+            '<span class="flex items-center gap-2">' + icon('local_offer', 'text-[16px]') + t('priceByQty') + '</span>' +
+            '<span class="flex items-center gap-2">' + icon('forum', 'text-[16px]') + t('discordSupport') + '</span>' +
+          '</div>' +
         '</div>' +
       '</section>' +
 
-      '<section id="modeli" class="py-section-padding-sm px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
-        '<div class="mb-10">' +
-          '<span class="text-label-caps font-label-caps text-secondary block mb-3">' + t('modelsCaps') + '</span>' +
-          '<h2 class="text-headline-md-mobile md:text-headline-md font-headline-md-mobile md:font-headline-md text-primary">' + t('chooseModel') + '</h2>' +
+      '<section id="modeli" class="scroll-mt-[80px] py-section-padding-sm px-margin-mobile md:px-gutter max-w-container-max mx-auto">' +
+        '<div class="reveal mb-12 flex flex-col gap-3" data-reveal="models-head">' +
+          '<span class="flex items-center gap-3 text-label-caps font-label-caps text-secondary"><span class="w-8 h-px bg-outline"></span>' + t('modelsCaps') + '</span>' +
+          '<h2 class="text-headline-md-mobile md:text-headline-md font-headline-md-mobile md:font-headline-md text-primary tracking-tight">' + t('chooseModel') + '</h2>' +
         '</div>' +
         '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">' + cards + '</div>' +
       '</section>' +
@@ -791,27 +914,29 @@ function renderProduct(id) {
   var total = tier.price * qty;
   var groups = groupBySeries(p.flavors);
 
-  var tiersHtml = p.priceTiers.map(function (t) {
-    var active = t.id === tier.id;
+  var tiersHtml = p.priceTiers.map(function (pt) {
+    var active = pt.id === tier.id;
     return (
-      '<div class="flex items-center justify-between py-3' + (active ? '' : '') + '" style="' + (active ? 'color:' + p.accent : '') + '">' +
-        '<span class="text-body-md font-body-md ' + (active ? 'font-semibold' : 'text-secondary') + '">' + tierLabel(t) + '</span>' +
-        '<span class="text-body-md font-body-md font-medium">' + formatRSD(t.price) + '</span>' +
+      '<div class="flex items-center justify-between py-3 px-3 -mx-3 rounded-lg transition-colors duration-300" style="' + (active ? 'color:' + p.accent + ';background:' + p.accent + '14' : '') + '">' +
+        '<span class="text-body-md font-body-md flex items-center gap-2 ' + (active ? 'font-semibold' : 'text-secondary') + '">' +
+          '<span class="w-1.5 h-1.5 rounded-full transition-opacity" style="background:' + p.accent + ';opacity:' + (active ? '1' : '0') + '"></span>' + tierLabel(pt) +
+        '</span>' +
+        '<span class="text-body-md font-body-md font-medium tabular-nums">' + formatRSD(pt.price) + '</span>' +
       '</div>'
     );
-  }).join('<div class="border-t border-outline-variant/60"></div>');
+  }).join('');
 
   var groupsHtml = groups.map(function (pair) {
     var series = pair[0], list = pair[1];
     var inStock = list.filter(function (f) { return f.qty > 0; });
-    var head = '<div class="flex items-baseline justify-between mb-4"><h3 class="text-title-sm font-title-sm text-primary">' + (groups.length > 1 ? t('seriesFlavors', escapeHtml(series)) : t('availableFlavors')) + '</h3><span class="text-secondary text-sm">' + t('xOfY', inStock.length, list.length) + '</span></div>';
+    var head = '<div class="reveal flex items-baseline justify-between mb-5" data-reveal="head-' + escapeHtml(series) + '"><h3 class="text-title-sm font-title-sm text-primary tracking-tight">' + (groups.length > 1 ? t('seriesFlavors', escapeHtml(series)) : t('availableFlavors')) + '</h3><span class="text-secondary text-sm tabular-nums">' + t('xOfY', inStock.length, list.length) + '</span></div>';
     var body;
     if (inStock.length === 0) {
       body = '<div class="flex items-center gap-2 text-secondary text-sm p-5 border border-dashed border-outline-variant rounded-xl">' + icon('inventory_2', 'text-[18px]') + t('noneInSeries') + '</div>';
     } else {
-      body = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">' + inStock.map(function (f) {
+      body = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">' + inStock.map(function (f, i) {
         return (
-          '<div class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/60 text-sm relative">' +
+          '<div class="reveal chip flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/60 text-sm relative" data-reveal="chip-' + f.id + '" style="--d:' + ((i % 4) * 60) + 'ms">' +
             flavorOrb(f.name) +
             '<span class="text-on-surface leading-tight">' + escapeHtml(f.name) + '</span>' +
             (f.qty <= 10 ? '<span class="absolute -top-2 -right-1 text-[9px] bg-surface-container-high text-secondary px-1.5 py-0.5 rounded-full">' + t('low') + '</span>' : '') +
@@ -819,44 +944,48 @@ function renderProduct(id) {
         );
       }).join('') + '</div>';
     }
-    return '<div class="mb-10">' + head + body + '</div>';
+    return '<div class="mb-12">' + head + body + '</div>';
   }).join('');
 
+  var puffs = productText(p, 'puffsLabel');
+
   return (
-    '<main class="pt-[64px] max-w-container-max mx-auto px-margin-mobile md:px-gutter py-section-padding-sm">' +
-      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backHome') + '</a>' +
+    '<main class="accent-' + id + ' pt-[64px] max-w-container-max mx-auto px-margin-mobile md:px-gutter py-section-padding-sm">' +
+      '<a href="#/" class="anim-up arrow-back inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backHome') + '</a>' +
       '<div class="grid grid-cols-1 md:grid-cols-12 gap-y-10 md:gap-x-gutter">' +
-        '<div class="md:col-span-6 bg-surface-container-low rounded-2xl soft-shadow flex items-center justify-center h-[380px] md:h-[560px] relative overflow-hidden">' +
-          '<div class="absolute -top-16 -right-16 w-72 h-72 rounded-full blur-3xl opacity-60" style="background:' + p.accent + '22"></div>' +
-          '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="h-[85%] w-auto object-contain relative z-10">' +
+        '<div class="anim-up md:col-span-6 bg-surface-container-low rounded-[28px] soft-shadow flex items-center justify-center h-[380px] md:h-[560px] relative overflow-hidden border border-outline-variant/40" style="--d:60ms">' +
+          '<div class="grid-bg absolute inset-0 pointer-events-none"></div>' +
+          '<span class="hero-orb" style="width:320px;height:320px;background:' + p.accent + ';top:-90px;right:-90px"></span>' +
+          '<span class="hero-orb" style="width:240px;height:240px;background:' + p.accent + ';bottom:-100px;left:-70px;animation-delay:-10s"></span>' +
+          '<img src="' + p.image + '" alt="' + escapeHtml(p.name) + '" class="float-slow h-[82%] w-auto object-contain relative z-10 drop-shadow-2xl">' +
         '</div>' +
         '<div class="md:col-span-6 flex flex-col justify-center">' +
-          '<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] mb-3" style="color:' + p.accent + '">' + icon(p.icon, 'text-[16px]') + productText(p, 'categoryLabel') + '</span>' +
-          '<h1 class="text-display-lg-mobile md:text-headline-md font-display-lg-mobile md:font-headline-md text-primary mb-3">' + p.name + '</h1>' +
-          '<p class="text-body-lg font-body-lg text-secondary mb-1">' + t('from') + ' <span class="text-primary font-medium">' + formatRSD(cheapestPrice(p.priceTiers)) + '</span> ' + t('perPiece') + (productText(p, 'puffsLabel') ? ' &middot; ' + productText(p, 'puffsLabel') : '') + '</p>' +
-          '<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mt-4">' + productText(p, 'tagline') + ' ' + productText(p, 'specsNote') + '</p>' +
+          '<span class="anim-up inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] mb-3" style="--d:120ms;color:' + p.accent + '">' + icon(p.icon, 'text-[16px]') + productText(p, 'categoryLabel') + '</span>' +
+          '<h1 class="anim-up text-display-lg-mobile md:text-headline-md font-display-lg-mobile md:font-headline-md text-primary tracking-tight mb-3" style="--d:160ms">' + p.name + '</h1>' +
+          '<p class="anim-up text-body-lg font-body-lg text-secondary mb-1" style="--d:200ms">' + t('from') + ' <span class="text-primary font-semibold tabular-nums">' + formatRSD(cheapestPrice(p.priceTiers)) + '</span> ' + t('perPiece') + (puffs ? ' &middot; ' + puffs : '') + '</p>' +
+          '<p class="anim-up text-body-md font-body-md text-on-surface-variant leading-relaxed mt-4" style="--d:240ms">' + productText(p, 'tagline') + ' ' + productText(p, 'specsNote') + '</p>' +
 
-          '<div class="bg-surface-container-low rounded-xl p-6 mt-8 soft-shadow">' +
-            '<div class="flex items-start gap-3 mb-1">' +
-              icon('local_offer', 'text-primary mt-0.5') +
-              '<h3 class="text-title-sm font-title-sm text-primary">' + t('qtyPricing') + '</h3>' +
+          '<div class="anim-up bg-surface-container-low rounded-2xl p-6 mt-8 border border-outline-variant/40" style="--d:280ms">' +
+            '<div class="flex items-center gap-3 mb-3">' +
+              icon('local_offer', 'text-primary') +
+              '<h3 class="text-title-sm font-title-sm text-primary tracking-tight">' + t('qtyPricing') + '</h3>' +
             '</div>' +
-            '<div class="pl-9">' + tiersHtml + '</div>' +
+            '<div class="flex flex-col gap-1">' + tiersHtml + '</div>' +
           '</div>' +
 
-          '<div class="flex items-center gap-4 mt-8">' +
-            '<div class="flex items-center border border-outline-variant rounded-lg">' +
-              '<button aria-label="' + t('decreaseQty') + '" data-action="qty-delta" data-product="' + id + '" data-delta="-1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('remove') + '</button>' +
-              '<input type="number" min="1" value="' + qty + '" data-action="qty-set" data-product="' + id + '" class="w-12 text-center border-none bg-transparent focus:outline-none text-body-md font-body-md">' +
-              '<button aria-label="' + t('increaseQty') + '" data-action="qty-delta" data-product="' + id + '" data-delta="1" class="w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant transition-colors">' + icon('add') + '</button>' +
+          '<div class="anim-up flex items-center gap-4 mt-8" style="--d:320ms">' +
+            '<div class="flex items-center border border-outline-variant rounded-xl overflow-hidden">' +
+              '<button aria-label="' + t('decreaseQty') + '" data-action="qty-delta" data-product="' + id + '" data-delta="-1" class="qty-btn w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant">' + icon('remove') + '</button>' +
+              '<input type="number" min="1" value="' + qty + '" data-action="qty-set" data-product="' + id + '" class="w-12 text-center border-none bg-transparent focus:outline-none focus:ring-0 text-body-md font-body-md tabular-nums">' +
+              '<button aria-label="' + t('increaseQty') + '" data-action="qty-delta" data-product="' + id + '" data-delta="1" class="qty-btn w-11 h-11 flex items-center justify-center text-primary hover:bg-surface-variant">' + icon('add') + '</button>' +
             '</div>' +
-            '<span class="text-secondary text-sm">' + t('total') + ' <span class="text-primary font-semibold">' + formatRSD(total) + '</span></span>' +
+            '<span class="text-secondary text-sm">' + t('total') + ' <span class="text-primary font-semibold tabular-nums">' + formatRSD(total) + '</span></span>' +
           '</div>' +
 
-          '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-primary text-on-primary py-4 rounded-lg text-label-caps font-label-caps hover:opacity-85 transition-opacity mt-4">' +
-            t('orderOnDiscord') + ' — ' + formatRSD(total) +
+          '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="anim-up btn-primary arrow-slide w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-4 rounded-xl text-label-caps font-label-caps mt-4" style="--d:360ms">' +
+            t('orderOnDiscord') + ' — <span class="tabular-nums">' + formatRSD(total) + '</span>' + icon('arrow_forward', 'text-[16px]') +
           '</a>' +
-          '<div class="flex items-center justify-center gap-2 pt-4 text-secondary text-label-caps font-label-caps">' + icon('forum', 'text-[16px]') + ' ' + t('orderNote') + '</div>' +
+          '<div class="anim-up flex items-center justify-center gap-2 pt-4 text-secondary text-label-caps font-label-caps text-center" style="--d:400ms">' + icon('forum', 'text-[16px]') + ' ' + t('orderNote') + '</div>' +
         '</div>' +
       '</div>' +
 
@@ -871,14 +1000,18 @@ function renderProduct(id) {
 
 function renderContact() {
   return (
-    '<main class="pt-[64px] max-w-xl mx-auto px-margin-mobile py-section-padding-sm text-center">' +
-      '<a href="#/" class="inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backHome') + '</a>' +
-      '<div class="bg-surface-container-lowest rounded-2xl soft-shadow p-10 md:p-14 flex flex-col items-center gap-5">' +
-        '<span class="w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center">' + icon('forum', 'text-[26px] text-primary') + '</span>' +
-        '<h1 class="text-headline-md-mobile font-headline-md-mobile text-primary">' + t('contactTitle') + ' ' + BRAND_NAME + '</h1>' +
-        '<p class="text-body-md font-body-md text-secondary leading-relaxed">' + t('contactText') + '</p>' +
-        '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="bg-[#5865F2] text-white px-8 py-4 rounded-full text-label-caps font-label-caps hover:opacity-90 transition-opacity flex items-center gap-2 mt-2">' + icon('forum', 'text-[18px]') + ' ' + t('joinDiscordServer') + '</a>' +
-        '<span class="text-secondary text-xs break-all">' + DISCORD_URL + '</span>' +
+    '<main class="pt-[64px] relative overflow-hidden">' +
+      '<div class="grid-bg absolute inset-0 pointer-events-none"></div>' +
+      '<span class="hero-orb" style="width:380px;height:380px;background:#5865F2;top:0;left:50%;margin-left:-190px"></span>' +
+      '<div class="relative max-w-xl mx-auto px-margin-mobile py-section-padding-sm text-center">' +
+        '<a href="#/" class="anim-up arrow-back inline-flex items-center gap-1.5 text-secondary text-sm mb-8 hover:text-primary transition-colors">' + icon('arrow_back', 'text-[18px]') + ' ' + t('backHome') + '</a>' +
+        '<div class="anim-up bg-surface-container-lowest/85 glass-panel border border-outline-variant/50 rounded-[28px] soft-shadow p-10 md:p-14 flex flex-col items-center gap-5" style="--d:80ms">' +
+          '<span class="w-14 h-14 rounded-2xl bg-[#5865F2]/10 flex items-center justify-center">' + icon('forum', 'text-[26px] text-[#5865F2]') + '</span>' +
+          '<h1 class="text-headline-md-mobile font-headline-md-mobile text-primary tracking-tight">' + t('contactTitle') + ' ' + BRAND_NAME + '</h1>' +
+          '<p class="text-body-md font-body-md text-secondary leading-relaxed">' + t('contactText') + '</p>' +
+          '<a href="' + DISCORD_URL + '" target="_blank" rel="noopener noreferrer" class="arrow-slide bg-[#5865F2] text-white px-8 py-4 rounded-full text-label-caps font-label-caps flex items-center gap-2 mt-2 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_#5865F2] active:scale-95">' + icon('forum', 'text-[18px]') + ' ' + t('joinDiscordServer') + '</a>' +
+          '<span class="text-secondary text-xs break-all">' + DISCORD_URL + '</span>' +
+        '</div>' +
       '</div>' +
     '</main>'
   );
@@ -1106,6 +1239,21 @@ function renderApp() {
 
   app.innerHTML = renderNav(route) + body;
 
+  // Play the entrance animation only when arriving on a new page.
+  var routeKey = route.view + ':' + (route.id || '');
+  if (routeKey !== lastRouteKey) {
+    lastRouteKey = routeKey;
+    revealed = {};
+    if (location.hash !== '#modeli') window.scrollTo(0, 0);
+    app.classList.remove('entering');
+    void app.offsetWidth;
+    app.classList.add('entering');
+    clearTimeout(enterTimer);
+    enterTimer = setTimeout(function () { app.classList.remove('entering'); }, 1500);
+  }
+  setupReveal();
+  updateHeaderShadow();
+
   if (focusInfo) {
     var selector = '[data-action="' + focusInfo.action + '"]';
     if (focusInfo.tier) selector += '[data-tier="' + focusInfo.tier + '"]';
@@ -1120,10 +1268,6 @@ function renderApp() {
     }
   }
 
-  requestAnimationFrame(function () {
-    document.querySelectorAll('.reveal-up').forEach(function (el) { el.classList.add('active'); });
-  });
-
   if (route.view === 'admin' && !adminUnlocked) {
     var input = document.getElementById('admin-code-input');
     if (input) input.focus();
@@ -1137,7 +1281,14 @@ function renderApp() {
 document.addEventListener('DOMContentLoaded', function () {
   document.documentElement.lang = LANG;
   if (!location.hash) location.hash = '#/';
-  window.addEventListener('hashchange', renderApp);
+  window.addEventListener('hashchange', function () {
+    renderApp();
+    if (location.hash === '#modeli') {
+      var models = document.getElementById('modeli');
+      if (models) models.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+  window.addEventListener('scroll', updateHeaderShadow, { passive: true });
 
   var app = document.getElementById('app');
 
@@ -1291,15 +1442,27 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initial load: try the shared backend; fall back to sensible defaults
   // (already in `catalog`) if the function isn't reachable yet, so the
   // site still renders instead of staying blank.
-  renderApp();
+  // Wait briefly for the real catalog before the first render, so the
+  // entrance animation plays once with real data instead of being cut
+  // short by a second render a moment later.
+  var booted = false;
+  app.classList.add('booting');
+  function boot() {
+    if (booted) return;
+    booted = true;
+    clearTimeout(bootTimer);
+    app.classList.remove('booting');
+    renderApp();
+  }
+  var bootTimer = setTimeout(boot, 1200);
   fetchCatalog().then(function (fresh) {
     catalog = mergeCatalogWithDefaults(fresh, defaultCatalog());
     catalogLoaded = true;
-    renderApp();
+    if (booted) renderApp(); else boot();
   }).catch(function () {
     catalogLoaded = true;
     catalogLoadError = true;
-    renderApp();
+    if (booted) renderApp(); else boot();
   });
 });
 </script>
